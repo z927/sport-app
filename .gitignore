@@ -1,0 +1,11 @@
+# Ignore node modules and build output
+node_modules/
+
+# Logs
+dist/
+
+# Ignore environment variable files
+.env
+
+# Ignore IDE specific files
+.vscode/
