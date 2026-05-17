@@ -1,5 +1,10 @@
 # Sports Team App
 
+[![Build Status](https://img.shields.io/github/actions/workflow/status/z927/sport-app/ci.yaml?style=for-the-badge&logo=github-actions&logoColor=white&color=2ecc71)](https://github.com/z927/sport-app/actions)
+[![Latest Version](https://img.shields.io/github/v/release/z927/sport-app?style=for-the-badge&logo=semver&logoColor=white&color=3498db)](https://github.com/z927/sport-app/releases)
+[![License](https://img.shields.io/github/license/z927/sport-app?style=for-the-badge&logo=opensourceinitiative&logoColor=white&color=f39c12)](./LICENSE)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg?style=for-the-badge&logo=git&logoColor=white&color=e74c3c)](https://conventionalcommits.org)
+
 Configurable Flutter mobile application prototype for a sports team. The default
 configuration currently points to Pallacanestro Varese public content, but the
 application code is structured around a generic `TeamSiteConfig` so another team
