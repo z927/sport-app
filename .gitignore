@@ -9,3 +9,6 @@ dist/
 
 # Ignore IDE specific files
 .vscode/
+
+# Dart specific files
+.dart_tool/
