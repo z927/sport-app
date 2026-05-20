@@ -48,28 +48,18 @@ flutter test
 flutter run
 ```
 
-## Fan API (Pallacanestro Varese)
+## Flutter fan API layer
 
-Internal backend-style API with separated provider, in-memory cache, global rate limiting, query validation with zod, request hardening via helmet, and sanitized content normalization.
+The app now includes a Flutter-side `BasketballApiService` that exposes a fan API contract inside the mobile client (no backend server required). It provides methods equivalent to:
 
-### Setup
-
-```bash
-cp .env.example .env
-npm install
-npm run dev
-```
-
-### Endpoints
-
-- `GET /api/basketball/news?limit=10`
-- `GET /api/basketball/news/{newsId}`
-- `GET /api/basketball/media/videos?limit=10`
-- `GET /api/basketball/media/photos?limit=10`
-- `GET /api/basketball/team/roster`
-- `GET /api/basketball/team/players/{playerId}`
-- `GET /api/basketball/team/staff`
-- `GET /api/basketball/matches`
-- `GET /api/basketball/matches/{matchId}`
-- `GET /api/basketball/standings`
-- `GET /api/basketball/team/profile`
+- `getNews(limit)`
+- `getNewsById(newsId)`
+- `getVideos(limit)`
+- `getPhotos(limit)`
+- `getRoster()`
+- `getPlayerById(playerId)`
+- `getStaff()`
+- `getMatches()`
+- `getMatchById(matchId)`
+- `getStandings()`
+- `getTeamProfile()`

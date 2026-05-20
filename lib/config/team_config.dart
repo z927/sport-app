@@ -10,7 +10,17 @@ class TeamSiteConfig {
     required this.teamUrl,
     required this.newsUrl,
     required this.ticketingUrl,
+    required this.rosterUrl,
+    required this.staffUrl,
+    required this.matchesUrl,
+    required this.videoGalleryUrl,
+    required this.photoGalleryUrl,
     required this.seedDashboard,
+    required this.seedStaff,
+    required this.seedVideos,
+    required this.seedPhotos,
+    required this.seedStandings,
+    required this.seedTeamProfile,
   });
 
   final String appTitle;
@@ -21,7 +31,17 @@ class TeamSiteConfig {
   final Uri teamUrl;
   final Uri newsUrl;
   final Uri ticketingUrl;
+  final Uri rosterUrl;
+  final Uri staffUrl;
+  final Uri matchesUrl;
+  final Uri videoGalleryUrl;
+  final Uri photoGalleryUrl;
   final TeamDashboard seedDashboard;
+  final List<StaffMember> seedStaff;
+  final List<MediaItem> seedVideos;
+  final List<MediaItem> seedPhotos;
+  final List<StandingRow> seedStandings;
+  final TeamProfile seedTeamProfile;
 }
 
 final defaultTeamConfig = TeamSiteConfig(
@@ -33,6 +53,11 @@ final defaultTeamConfig = TeamSiteConfig(
   teamUrl: Uri.https('www.pallacanestrovarese.it', '/squadra'),
   newsUrl: Uri.https('www.pallacanestrovarese.it', '/news'),
   ticketingUrl: Uri.https('pallacanestrovarese.vivaticket.it', '/'),
+  rosterUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/roster'),
+  staffUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/staff'),
+  matchesUrl: Uri.https('www.pallacanestrovarese.it', '/it/stagione/calendario'),
+  videoGalleryUrl: Uri.https('www.pallacanestrovarese.it', '/it/media/videogallery'),
+  photoGalleryUrl: Uri.https('www.pallacanestrovarese.it', '/it/media/fotogallery'),
   seedDashboard: TeamDashboard(
     news: [
       NewsItem(
@@ -111,5 +136,35 @@ final defaultTeamConfig = TeamSiteConfig(
     ),
     sourceUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
     updatedAt: DateTime(2026, 4, 1, 12),
+  ),
+  seedStaff: const [
+    StaffMember(
+      name: 'Coach Kastritis',
+      role: 'Head Coach',
+      profileUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/staff'),
+    ),
+  ],
+  seedVideos: const [
+    MediaItem(
+      id: 'video-1',
+      title: 'Match Highlights',
+      url: Uri.https('www.pallacanestrovarese.it', '/it/media/videogallery'),
+    ),
+  ],
+  seedPhotos: const [
+    MediaItem(
+      id: 'photo-1',
+      title: 'Game Photo Gallery',
+      url: Uri.https('www.pallacanestrovarese.it', '/it/media/fotogallery'),
+    ),
+  ],
+  seedStandings: const [
+    StandingRow(teamName: 'Pallacanestro Varese', points: 30, played: 20),
+  ],
+  seedTeamProfile: TeamProfile(
+    name: 'Pallacanestro Varese',
+    arena: 'Itelyum Arena',
+    city: 'Varese',
+    websiteUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
   ),
 );
