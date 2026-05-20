@@ -90,26 +90,26 @@ class BasketballApiService {
   NewsItem _toNews(Map<String, dynamic> json) => NewsItem(
         title: json['title']?.toString() ?? '',
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
-        url: Uri.parse(json['url']?.toString() ?? _config.newsUrl.toString()),
+        url: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
       );
 
   MediaItem _toMedia(Map<String, dynamic> json, String prefix) => MediaItem(
         id: json['id']?.toString() ?? '$prefix-${json['title'] ?? 'item'}',
         title: json['title']?.toString() ?? '',
-        url: Uri.parse(json['url']?.toString() ?? _config.homeUrl.toString()),
+        url: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
       );
 
   Player _toPlayer(Map<String, dynamic> json) => Player(
         number: json['number']?.toString() ?? '',
         name: json['name']?.toString() ?? '',
-        profileUrl: Uri.parse(json['url']?.toString() ?? json['profileUrl']?.toString() ?? _config.rosterUrl.toString()),
+        profileUrl: Uri.parse(json['url']?.toString() ?? json['profileUrl']?.toString() ?? _config.backendBaseUrl.toString()),
       );
 
   StaffMember _toStaff(Map<String, dynamic> json) => StaffMember(
         name: json['name']?.toString() ?? '',
         role: json['role']?.toString() ?? '',
-        profileUrl: Uri.parse(json['url']?.toString() ?? _config.staffUrl.toString()),
+        profileUrl: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
       );
 
   Game _toGame(Map<String, dynamic> json) {
@@ -139,7 +139,7 @@ class BasketballApiService {
         name: json['name']?.toString() ?? '',
         arena: json['venue']?.toString() ?? json['arena']?.toString() ?? '',
         city: json['city']?.toString() ?? '',
-        websiteUrl: Uri.parse(json['website']?.toString() ?? _config.homeUrl.toString()),
+        websiteUrl: Uri.parse(json['website']?.toString() ?? _config.backendBaseUrl.toString()),
       );
 }
 
