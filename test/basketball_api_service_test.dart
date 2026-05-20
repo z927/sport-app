@@ -1,0 +1,71 @@
+import 'dart:convert';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:sports_team_app/config/team_config.dart';
+import 'package:sports_team_app/services/basketball_api_service.dart';
+
+void main() {
+  group('BasketballApiService backend integration contract', () {
+    test('calls news endpoint with limit and maps response', () async {
+      final client = MockClient((request) async {
+        expect(request.url.path, '/api/basketball/news');
+        expect(request.url.queryParameters['limit'], '1');
+        return http.Response(
+          jsonEncode([
+            {
+              'id': 'n1',
+              'title': 'News title',
+              'date': '2026-05-20',
+              'url': 'https://www.pallacanestrovarese.it/it/news/n1'
+            }
+          ]),
+          200,
+        );
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final news = await service.getNews(limit: 1);
+
+      expect(news, hasLength(1));
+      expect(news.first.title, 'News title');
+    });
+
+    test('returns null on 404 resource endpoint', () async {
+      final client = MockClient((request) async {
+        return http.Response('{"error":"not found"}', 404);
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final player = await service.getPlayerById('missing');
+      expect(player, isNull);
+    });
+
+    test('maps standings and profile from backend payload', () async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/api/basketball/standings') {
+          return http.Response(jsonEncode([
+            {'team': 'Varese', 'points': 32, 'played': 22}
+          ]), 200);
+        }
+
+        if (request.url.path == '/api/basketball/team/profile') {
+          return http.Response(
+            jsonEncode({'name': 'Pallacanestro Varese', 'city': 'Varese', 'venue': 'Itelyum Arena'}),
+            200,
+          );
+        }
+
+        return http.Response('[]', 200);
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final standings = await service.getStandings();
+      final profile = await service.getTeamProfile();
+
+      expect(standings.single.points, 32);
+      expect(profile?.arena, 'Itelyum Arena');
+    });
+  });
+}

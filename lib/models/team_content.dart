@@ -74,6 +74,58 @@ class ClubInfo {
   final List<String> palmares;
 }
 
+class StaffMember {
+  const StaffMember({
+    required this.name,
+    required this.role,
+    required this.profileUrl,
+  });
+
+  final String name;
+  final String role;
+  final Uri profileUrl;
+}
+
+class MediaItem {
+  const MediaItem({
+    required this.id,
+    required this.title,
+    required this.url,
+    this.dateLabel = '',
+  });
+
+  final String id;
+  final String title;
+  final Uri url;
+  final String dateLabel;
+}
+
+class StandingRow {
+  const StandingRow({
+    required this.teamName,
+    required this.points,
+    required this.played,
+  });
+
+  final String teamName;
+  final int points;
+  final int played;
+}
+
+class TeamProfile {
+  const TeamProfile({
+    required this.name,
+    required this.arena,
+    required this.city,
+    required this.websiteUrl,
+  });
+
+  final String name;
+  final String arena;
+  final String city;
+  final Uri websiteUrl;
+}
+
 class TeamDashboard {
   const TeamDashboard({
     required this.news,
