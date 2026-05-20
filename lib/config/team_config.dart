@@ -21,9 +21,9 @@ class TeamSiteConfig {
   final String teamKeyword;
   final int primaryColor;
   final int secondaryColor;
-  final Uri homeUrl;
-  final Uri ticketingUrl;
-  final Uri backendBaseUrl;
+  final String homeUrl;
+  final String ticketingUrl;
+  final String backendBaseUrl;
   final TeamDashboard seedDashboard;
   final List<StaffMember> seedStaff;
   final List<MediaItem> seedVideos;
@@ -36,9 +36,9 @@ class TeamSiteConfig {
     String? teamKeyword,
     int? primaryColor,
     int? secondaryColor,
-    Uri? homeUrl,
-    Uri? ticketingUrl,
-    Uri? backendBaseUrl,
+    String? homeUrl,
+    String? ticketingUrl,
+    String? backendBaseUrl,
     TeamDashboard? seedDashboard,
     List<StaffMember>? seedStaff,
     List<MediaItem>? seedVideos,
@@ -69,28 +69,28 @@ final defaultTeamConfig = TeamSiteConfig(
   teamKeyword: 'Varese',
   primaryColor: 0xFFE30613,
   secondaryColor: 0xFF8B0008,
-  homeUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
-  ticketingUrl: Uri.https('pallacanestrovarese.vivaticket.it', '/'),
-  backendBaseUrl: Uri.parse('http://localhost:3000'),
+  homeUrl: 'https://www.pallacanestrovarese.it/it/',
+  ticketingUrl: 'https://pallacanestrovarese.vivaticket.it/',
+  backendBaseUrl: 'http://localhost:3000',
   seedDashboard: TeamDashboard(
-    news: [
+    news: const [
       NewsItem(
         title: 'ATTIVE LE PREVENDITE PER VARESE-CREMONA',
         dateLabel: '01/04/2026',
-        url: Uri.https('www.pallacanestrovarese.it', '/news'),
+        url: 'https://www.pallacanestrovarese.it/news',
       ),
       NewsItem(
         title: "LBA 25-26. UFFICIALE L'ORARIO DELLA VENTOTTESIMA GIORNATA",
         dateLabel: '01/04/2026',
-        url: Uri.https('www.pallacanestrovarese.it', '/news'),
+        url: 'https://www.pallacanestrovarese.it/news',
       ),
       NewsItem(
         title: 'VARESE DA URLO: SUCCESSO CASALINGO CONTRO TORTONA',
         dateLabel: '28/03/2026',
-        url: Uri.https('www.pallacanestrovarese.it', '/news'),
+        url: 'https://www.pallacanestrovarese.it/news',
       ),
     ],
-    games: [
+    games: const [
       Game(
         competition: 'Campionato',
         dateLabel: '28.03.2026 / 18:30',
@@ -99,7 +99,7 @@ final defaultTeamConfig = TeamSiteConfig(
         homeScore: 97,
         awayScore: 87,
         status: GameStatus.completed,
-        boxScoreUrl: Uri.https('www.pallacanestrovarese.it', '/'),
+        boxScoreUrl: 'https://www.pallacanestrovarese.it/',
       ),
       Game(
         competition: 'Campionato',
@@ -109,7 +109,7 @@ final defaultTeamConfig = TeamSiteConfig(
         homeScore: 0,
         awayScore: 0,
         status: GameStatus.scheduled,
-        streamUrl: Uri.https('www.lbatv.com', '/'),
+        streamUrl: 'https://www.lbatv.com/',
       ),
       Game(
         competition: 'Campionato',
@@ -121,19 +121,19 @@ final defaultTeamConfig = TeamSiteConfig(
         status: GameStatus.scheduled,
       ),
     ],
-    players: [
-      Player(number: '1', name: 'CARLOS STEWART JR.', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '2', name: 'DAVIDE ALVITI', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '4', name: 'TAZÉ MOORE', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '5', name: 'MAURO VILLA', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '7', name: 'ELISÉE ASSUI', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '8', name: 'OLIVIER NKAMHOUA', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '11', name: 'IKE IROEGBU', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '13', name: 'MATTEO LIBRIZZI', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '15', name: 'NATE RENFRO', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '19', name: 'MARCO BERGAMIN', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '34', name: 'MAXIMILIAN LADURNER', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
-      Player(number: '55', name: 'ALLERIK FREEMAN', profileUrl: Uri.https('www.pallacanestrovarese.it', '/squadra')),
+    players: const [
+      Player(number: '1', name: 'CARLOS STEWART JR.', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '2', name: 'DAVIDE ALVITI', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '4', name: 'TAZÉ MOORE', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '5', name: 'MAURO VILLA', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '7', name: 'ELISÉE ASSUI', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '8', name: 'OLIVIER NKAMHOUA', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '11', name: 'IKE IROEGBU', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '13', name: 'MATTEO LIBRIZZI', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '15', name: 'NATE RENFRO', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '19', name: 'MARCO BERGAMIN', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '34', name: 'MAXIMILIAN LADURNER', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
+      Player(number: '55', name: 'ALLERIK FREEMAN', profileUrl: 'https://www.pallacanestrovarese.it/squadra'),
     ],
     clubInfo: const ClubInfo(
       name: 'Pallacanestro Varese',
@@ -148,37 +148,37 @@ final defaultTeamConfig = TeamSiteConfig(
         '1 Supercoppa Italiana',
       ],
     ),
-    sourceUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
+    sourceUrl: 'https://www.pallacanestrovarese.it/it/',
     updatedAt: DateTime(2026, 4, 1, 12),
   ),
   seedStaff: const [
     StaffMember(
-      name: 'Coach Kastritis',
+      name: 'Herman Mandole',
       role: 'Head Coach',
-      profileUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/staff'),
+      profileUrl: 'https://www.pallacanestrovarese.it/it/squadra/staff',
     ),
   ],
   seedVideos: const [
     MediaItem(
       id: 'video-1',
       title: 'Match Highlights',
-      url: Uri.https('www.pallacanestrovarese.it', '/it/media/videogallery'),
+      url: 'https://www.pallacanestrovarese.it/it/media/videogallery',
     ),
   ],
   seedPhotos: const [
     MediaItem(
       id: 'photo-1',
       title: 'Game Photo Gallery',
-      url: Uri.https('www.pallacanestrovarese.it', '/it/media/fotogallery'),
+      url: 'https://www.pallacanestrovarese.it/it/media/fotogallery',
     ),
   ],
   seedStandings: const [
     StandingRow(teamName: 'Pallacanestro Varese', points: 30, played: 20),
   ],
-  seedTeamProfile: TeamProfile(
+  seedTeamProfile: const TeamProfile(
     name: 'Pallacanestro Varese',
     arena: 'Itelyum Arena',
     city: 'Varese',
-    websiteUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
+    websiteUrl: 'https://www.pallacanestrovarese.it/it/',
   ),
 );

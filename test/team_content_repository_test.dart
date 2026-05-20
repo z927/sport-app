@@ -28,14 +28,17 @@ class _FakeBasketballApiService extends BasketballApiService {
 
   @override
   Future<TeamProfile?> getTeamProfile() async => profile;
+
+  @override
+  void dispose() {}
 }
 
 void main() {
   group('TeamContentRepository backend composition', () {
     test('builds dashboard from backend responses only', () async {
       final api = _FakeBasketballApiService(
-        news: [
-          NewsItem(title: 'Backend News', dateLabel: '13/05/2026', url: Uri.parse('http://localhost:3000/n1')),
+        news: const [
+          NewsItem(title: 'Backend News', dateLabel: '13/05/2026', url: 'http://localhost:3000/n1'),
         ],
         games: const [
           Game(
@@ -48,14 +51,14 @@ void main() {
             status: GameStatus.completed,
           )
         ],
-        players: [
-          Player(number: '2', name: 'DAVIDE ALVITI', profileUrl: Uri.parse('http://localhost:3000/p2')),
+        players: const [
+          Player(number: '2', name: 'DAVIDE ALVITI', profileUrl: 'http://localhost:3000/p2'),
         ],
-        profile: TeamProfile(
+        profile: const TeamProfile(
           name: 'Pallacanestro Varese',
           arena: 'Itelyum Arena',
           city: 'Varese',
-          websiteUrl: Uri.parse('http://localhost:3000'),
+          websiteUrl: 'http://localhost:3000',
         ),
       );
 

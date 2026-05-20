@@ -12,6 +12,10 @@ class TeamContentRepository {
   final TeamSiteConfig _config;
   final BasketballApiService _apiService;
 
+  void dispose() {
+    _apiService.dispose();
+  }
+
   Future<TeamDashboard> loadDashboard() async {
     try {
       final results = await Future.wait([

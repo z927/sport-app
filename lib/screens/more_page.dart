@@ -28,18 +28,18 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.email_outlined),
           title: Text(info.email),
-          onTap: () => openExternalUrl(Uri(scheme: 'mailto', path: info.email)),
+          onTap: () => openExternalUrl('mailto:${info.email}'),
         ),
         ListTile(
           leading: const Icon(Icons.phone_outlined),
           title: Text(info.phone),
-          onTap: () => openExternalUrl(Uri(scheme: 'tel', path: info.phone)),
+          onTap: () => openExternalUrl('tel:${info.phone}'),
         ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.public),
           title: const Text('Sito ufficiale'),
-          subtitle: Text(dashboard.sourceUrl.toString()),
+          subtitle: Text(dashboard.sourceUrl),
           onTap: () => openExternalUrl(dashboard.sourceUrl),
         ),
         ListTile(

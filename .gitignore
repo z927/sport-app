@@ -15,6 +15,7 @@ dist/
 .idea/
 *.iml
 .metadata
+build/
 
 # Platform specific files
 android/

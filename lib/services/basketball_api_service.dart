@@ -18,6 +18,10 @@ class BasketballApiService {
   final http.Client _client;
   final Duration _timeout;
 
+  void dispose() {
+    _client.close();
+  }
+
   Future<List<NewsItem>> getNews({int limit = 10}) async {
     final data = await _getList('/api/basketball/news', query: {'limit': '$limit'});
     return data.map(_toNews).toList();
@@ -82,34 +86,37 @@ class BasketballApiService {
     return Map<String, dynamic>.from(decoded);
   }
 
-  Uri _buildUri(String path, {Map<String, String>? query}) => _config.backendBaseUrl.replace(
-        path: path,
-        queryParameters: query,
-      );
+  Uri _buildUri(String path, {Map<String, String>? query}) {
+    final baseUri = Uri.parse(_config.backendBaseUrl);
+    return baseUri.replace(
+      path: path,
+      queryParameters: query,
+    );
+  }
 
   NewsItem _toNews(Map<String, dynamic> json) => NewsItem(
         title: json['title']?.toString() ?? '',
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
-        url: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
+        url: json['url']?.toString() ?? _config.backendBaseUrl,
       );
 
   MediaItem _toMedia(Map<String, dynamic> json, String prefix) => MediaItem(
         id: json['id']?.toString() ?? '$prefix-${json['title'] ?? 'item'}',
         title: json['title']?.toString() ?? '',
-        url: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
+        url: json['url']?.toString() ?? _config.backendBaseUrl,
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
       );
 
   Player _toPlayer(Map<String, dynamic> json) => Player(
         number: json['number']?.toString() ?? '',
         name: json['name']?.toString() ?? '',
-        profileUrl: Uri.parse(json['url']?.toString() ?? json['profileUrl']?.toString() ?? _config.backendBaseUrl.toString()),
+        profileUrl: json['url']?.toString() ?? json['profileUrl']?.toString() ?? _config.backendBaseUrl,
       );
 
   StaffMember _toStaff(Map<String, dynamic> json) => StaffMember(
         name: json['name']?.toString() ?? '',
         role: json['role']?.toString() ?? '',
-        profileUrl: Uri.parse(json['url']?.toString() ?? _config.backendBaseUrl.toString()),
+        profileUrl: json['url']?.toString() ?? _config.backendBaseUrl,
       );
 
   Game _toGame(Map<String, dynamic> json) {
@@ -126,6 +133,10 @@ class BasketballApiService {
           : status == 'live'
               ? GameStatus.live
               : GameStatus.scheduled,
+      boxScoreUrl: json['boxScoreUrl']?.toString(),
+      streamUrl: json['streamUrl']?.toString(),
+      venueUrl: json['venueUrl']?.toString(),
+      highlightsUrl: json['highlightsUrl']?.toString(),
     );
   }
 
@@ -139,7 +150,7 @@ class BasketballApiService {
         name: json['name']?.toString() ?? '',
         arena: json['venue']?.toString() ?? json['arena']?.toString() ?? '',
         city: json['city']?.toString() ?? '',
-        websiteUrl: Uri.parse(json['website']?.toString() ?? _config.backendBaseUrl.toString()),
+        websiteUrl: json['website']?.toString() ?? _config.backendBaseUrl,
       );
 }
 

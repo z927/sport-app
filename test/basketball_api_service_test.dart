@@ -46,10 +46,11 @@ void main() {
       await service.getStandings();
 
       expect(requestedUris, isNotEmpty);
+      final expectedBaseUri = Uri.parse(defaultTeamConfig.backendBaseUrl);
       for (final uri in requestedUris) {
-        expect(uri.scheme, defaultTeamConfig.backendBaseUrl.scheme);
-        expect(uri.host, defaultTeamConfig.backendBaseUrl.host);
-        expect(uri.port, defaultTeamConfig.backendBaseUrl.port);
+        expect(uri.scheme, expectedBaseUri.scheme);
+        expect(uri.host, expectedBaseUri.host);
+        expect(uri.port, expectedBaseUri.port);
       }
     });
 

@@ -12,7 +12,7 @@ void main() {
   runApp(
     SportsTeamApp(
       config: defaultTeamConfig.copyWith(
-        backendBaseUrl: Uri.parse(backendBaseUrl),
+        backendBaseUrl: backendBaseUrl,
       ),
     ),
   );

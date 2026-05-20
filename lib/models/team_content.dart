@@ -7,7 +7,7 @@ class NewsItem {
 
   final String title;
   final String dateLabel;
-  final Uri url;
+  final String url;
 }
 
 class Player {
@@ -19,7 +19,7 @@ class Player {
 
   final String number;
   final String name;
-  final Uri profileUrl;
+  final String profileUrl;
 }
 
 enum GameStatus { scheduled, live, completed }
@@ -46,10 +46,10 @@ class Game {
   final int? homeScore;
   final int? awayScore;
   final GameStatus status;
-  final Uri? venueUrl;
-  final Uri? streamUrl;
-  final Uri? boxScoreUrl;
-  final Uri? highlightsUrl;
+  final String? venueUrl;
+  final String? streamUrl;
+  final String? boxScoreUrl;
+  final String? highlightsUrl;
 
   bool involves(String teamKeyword) {
     final normalizedKeyword = teamKeyword.toLowerCase();
@@ -83,7 +83,7 @@ class StaffMember {
 
   final String name;
   final String role;
-  final Uri profileUrl;
+  final String profileUrl;
 }
 
 class MediaItem {
@@ -96,7 +96,7 @@ class MediaItem {
 
   final String id;
   final String title;
-  final Uri url;
+  final String url;
   final String dateLabel;
 }
 
@@ -123,7 +123,7 @@ class TeamProfile {
   final String name;
   final String arena;
   final String city;
-  final Uri websiteUrl;
+  final String websiteUrl;
 }
 
 class TeamDashboard {
@@ -140,6 +140,6 @@ class TeamDashboard {
   final List<Game> games;
   final List<Player> players;
   final ClubInfo clubInfo;
-  final Uri sourceUrl;
+  final String sourceUrl;
   final DateTime updatedAt;
 }
