@@ -47,3 +47,29 @@ flutter analyze
 flutter test
 flutter run
 ```
+
+## Fan API (Pallacanestro Varese)
+
+Internal backend-style API with separated provider, in-memory cache, global rate limiting, query validation with zod, request hardening via helmet, and sanitized content normalization.
+
+### Setup
+
+```bash
+cp .env.example .env
+npm install
+npm run dev
+```
+
+### Endpoints
+
+- `GET /api/basketball/news?limit=10`
+- `GET /api/basketball/news/{newsId}`
+- `GET /api/basketball/media/videos?limit=10`
+- `GET /api/basketball/media/photos?limit=10`
+- `GET /api/basketball/team/roster`
+- `GET /api/basketball/team/players/{playerId}`
+- `GET /api/basketball/team/staff`
+- `GET /api/basketball/matches`
+- `GET /api/basketball/matches/{matchId}`
+- `GET /api/basketball/standings`
+- `GET /api/basketball/team/profile`
