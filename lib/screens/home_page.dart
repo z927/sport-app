@@ -27,15 +27,21 @@ class HomePage extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: () async => onRefresh(),
       child: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
         children: [
           NextGameCard(game: nextGame, config: config),
           const SizedBox(height: 16),
-          Text('Ultime news', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'Ultime news',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           ...dashboard.news.take(3).map((item) => NewsTile(item: item)),
           const SizedBox(height: 16),
-          Text('Palmarès', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            'Palmarès',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
