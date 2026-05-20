@@ -9,6 +9,14 @@ class NextGameCard extends StatelessWidget {
   final Game game;
   final TeamSiteConfig config;
 
+  String _shortLabel(String team) {
+    final parts = team.trim().split(RegExp(r'\s+'));
+    if (parts.length == 1) {
+      return parts.first.substring(0, parts.first.length.clamp(0, 3)).toUpperCase();
+    }
+    return parts.take(2).map((part) => part.substring(0, 1).toUpperCase()).join();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,18 +39,75 @@ class NextGameCard extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 16),
-          Text(
-            '${game.homeTeam} - ${game.awayTeam}',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        _shortLabel(game.homeTeam),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Color(config.primaryColor),
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      game.homeTeam,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
                 ),
+              ),
+              Text(
+                'VS',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              Expanded(
+                child: Column(
+                  children: [
+                    CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Colors.white,
+                      child: Text(
+                        _shortLabel(game.awayTeam),
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              color: Color(config.primaryColor),
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      game.awayTeam,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
           Text(
             game.dateLabel,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: Colors.white,
+                  fontWeight: FontWeight.w600,
                 ),
           ),
         ],
