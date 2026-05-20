@@ -32,6 +32,27 @@ void main() {
       expect(news.first.title, 'News title');
     });
 
+    test('uses configured localhost backend for basketball endpoints', () async {
+      final requestedUris = <Uri>[];
+      final client = MockClient((request) async {
+        requestedUris.add(request.url);
+        return http.Response('[]', 200);
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      await service.getNews();
+      await service.getRoster();
+      await service.getMatches();
+      await service.getStandings();
+
+      expect(requestedUris, isNotEmpty);
+      for (final uri in requestedUris) {
+        expect(uri.scheme, defaultTeamConfig.backendBaseUrl.scheme);
+        expect(uri.host, defaultTeamConfig.backendBaseUrl.host);
+        expect(uri.port, defaultTeamConfig.backendBaseUrl.port);
+      }
+    });
+
     test('returns null on 404 resource endpoint', () async {
       final client = MockClient((request) async {
         return http.Response('{"error":"not found"}', 404);
