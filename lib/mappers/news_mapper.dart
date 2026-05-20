@@ -1,9 +1,11 @@
-import 'news';
+import '../models/team_content.dart';
 
 class NewsMapper {
-    NewsItem _toNews(Map<String, dynamic> json) => NewsItem(
+  const NewsMapper._();
+
+  static NewsItem fromJson(Map<String, dynamic> json, {required String fallbackUrl}) => NewsItem(
         title: json['title']?.toString() ?? '',
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
-        url: json['url']?.toString() ?? _config.backendBaseUrl,
+        url: json['url']?.toString() ?? fallbackUrl,
       );
 }
