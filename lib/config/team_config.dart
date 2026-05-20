@@ -7,15 +7,8 @@ class TeamSiteConfig {
     required this.primaryColor,
     required this.secondaryColor,
     required this.homeUrl,
-    required this.teamUrl,
-    required this.newsUrl,
     required this.ticketingUrl,
     required this.backendBaseUrl,
-    required this.rosterUrl,
-    required this.staffUrl,
-    required this.matchesUrl,
-    required this.videoGalleryUrl,
-    required this.photoGalleryUrl,
     required this.seedDashboard,
     required this.seedStaff,
     required this.seedVideos,
@@ -29,15 +22,8 @@ class TeamSiteConfig {
   final int primaryColor;
   final int secondaryColor;
   final Uri homeUrl;
-  final Uri teamUrl;
-  final Uri newsUrl;
   final Uri ticketingUrl;
   final Uri backendBaseUrl;
-  final Uri rosterUrl;
-  final Uri staffUrl;
-  final Uri matchesUrl;
-  final Uri videoGalleryUrl;
-  final Uri photoGalleryUrl;
   final TeamDashboard seedDashboard;
   final List<StaffMember> seedStaff;
   final List<MediaItem> seedVideos;
@@ -51,15 +37,8 @@ class TeamSiteConfig {
     int? primaryColor,
     int? secondaryColor,
     Uri? homeUrl,
-    Uri? teamUrl,
-    Uri? newsUrl,
     Uri? ticketingUrl,
     Uri? backendBaseUrl,
-    Uri? rosterUrl,
-    Uri? staffUrl,
-    Uri? matchesUrl,
-    Uri? videoGalleryUrl,
-    Uri? photoGalleryUrl,
     TeamDashboard? seedDashboard,
     List<StaffMember>? seedStaff,
     List<MediaItem>? seedVideos,
@@ -73,15 +52,8 @@ class TeamSiteConfig {
       primaryColor: primaryColor ?? this.primaryColor,
       secondaryColor: secondaryColor ?? this.secondaryColor,
       homeUrl: homeUrl ?? this.homeUrl,
-      teamUrl: teamUrl ?? this.teamUrl,
-      newsUrl: newsUrl ?? this.newsUrl,
       ticketingUrl: ticketingUrl ?? this.ticketingUrl,
       backendBaseUrl: backendBaseUrl ?? this.backendBaseUrl,
-      rosterUrl: rosterUrl ?? this.rosterUrl,
-      staffUrl: staffUrl ?? this.staffUrl,
-      matchesUrl: matchesUrl ?? this.matchesUrl,
-      videoGalleryUrl: videoGalleryUrl ?? this.videoGalleryUrl,
-      photoGalleryUrl: photoGalleryUrl ?? this.photoGalleryUrl,
       seedDashboard: seedDashboard ?? this.seedDashboard,
       seedStaff: seedStaff ?? this.seedStaff,
       seedVideos: seedVideos ?? this.seedVideos,
@@ -98,15 +70,8 @@ final defaultTeamConfig = TeamSiteConfig(
   primaryColor: 0xFFE30613,
   secondaryColor: 0xFF8B0008,
   homeUrl: Uri.https('www.pallacanestrovarese.it', '/it/'),
-  teamUrl: Uri.https('www.pallacanestrovarese.it', '/squadra'),
-  newsUrl: Uri.https('www.pallacanestrovarese.it', '/news'),
   ticketingUrl: Uri.https('pallacanestrovarese.vivaticket.it', '/'),
   backendBaseUrl: Uri.parse('http://localhost:3000'),
-  rosterUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/roster'),
-  staffUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/staff'),
-  matchesUrl: Uri.https('www.pallacanestrovarese.it', '/it/stagione/calendario'),
-  videoGalleryUrl: Uri.https('www.pallacanestrovarese.it', '/it/media/videogallery'),
-  photoGalleryUrl: Uri.https('www.pallacanestrovarese.it', '/it/media/fotogallery'),
   seedDashboard: TeamDashboard(
     news: [
       NewsItem(
