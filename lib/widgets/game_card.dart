@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../models/team_content.dart';
-import '../utils/link_launcher.dart';
 
 class GameCard extends StatelessWidget {
   const GameCard({required this.game, super.key});
@@ -33,28 +32,49 @@ class GameCard extends StatelessWidget {
             _ScoreLine(team: game.homeTeam, score: game.homeScore),
             const SizedBox(height: 8),
             _ScoreLine(team: game.awayTeam, score: game.awayScore),
-            if (game.streamUrl != null || game.boxScoreUrl != null) ...[
+            if (game.streamUrl != null || game.boxScoreUrl != null || game.highlightsUrl != null || game.venueUrl != null) ...[
               const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                children: [
-                  if (game.streamUrl != null)
-                    OutlinedButton.icon(
-                      onPressed: () => openExternalUrl(game.streamUrl!),
-                      icon: const Icon(Icons.live_tv),
-                      label: const Text('Diretta'),
+              FilledButton.tonalIcon(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => _GameDetailsPage(game: game),
                     ),
-                  if (game.boxScoreUrl != null)
-                    OutlinedButton.icon(
-                      onPressed: () => openExternalUrl(game.boxScoreUrl!),
-                      icon: const Icon(Icons.scoreboard_outlined),
-                      label: const Text('Tabellino'),
-                    ),
-                ],
+                  );
+                },
+                icon: const Icon(Icons.info_outline),
+                label: const Text('Dettagli partita'),
               ),
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _GameDetailsPage extends StatelessWidget {
+  const _GameDetailsPage({required this.game});
+
+  final Game game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Dettagli partita')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text('${game.homeTeam} - ${game.awayTeam}', style: Theme.of(context).textTheme.headlineSmall),
+          const SizedBox(height: 8),
+          Text('Competizione: ${game.competition}'),
+          Text('Data: ${game.dateLabel}'),
+          Text('Punteggio: ${game.homeScore ?? '-'} - ${game.awayScore ?? '-'}'),
+          if (game.streamUrl != null) Text('Diretta (backend): ${game.streamUrl}'),
+          if (game.boxScoreUrl != null) Text('Tabellino (backend): ${game.boxScoreUrl}'),
+          if (game.highlightsUrl != null) Text('Highlights (backend): ${game.highlightsUrl}'),
+          if (game.venueUrl != null) Text('Venue (backend): ${game.venueUrl}'),
+        ],
       ),
     );
   }

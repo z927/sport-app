@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../config/team_config.dart';
 import '../models/team_content.dart';
-import '../utils/link_launcher.dart';
 
 class MorePage extends StatelessWidget {
   const MorePage({
@@ -28,24 +27,23 @@ class MorePage extends StatelessWidget {
         ListTile(
           leading: const Icon(Icons.email_outlined),
           title: Text(info.email),
-          onTap: () => openExternalUrl('mailto:${info.email}'),
+          subtitle: const Text('Contatto disponibile in-app'),
         ),
         ListTile(
           leading: const Icon(Icons.phone_outlined),
           title: Text(info.phone),
-          onTap: () => openExternalUrl('tel:${info.phone}'),
+          subtitle: const Text('Contatto disponibile in-app'),
         ),
         const Divider(),
         ListTile(
           leading: const Icon(Icons.public),
           title: const Text('Sito ufficiale'),
           subtitle: Text(dashboard.sourceUrl),
-          onTap: () => openExternalUrl(dashboard.sourceUrl),
         ),
         ListTile(
           leading: const Icon(Icons.confirmation_number_outlined),
           title: const Text('Biglietteria'),
-          onTap: () => openExternalUrl(config.ticketingUrl),
+          subtitle: Text(config.ticketingUrl),
         ),
       ],
     );
