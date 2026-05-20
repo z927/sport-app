@@ -6,8 +6,6 @@ class TeamSiteConfig {
     required this.teamKeyword,
     required this.primaryColor,
     required this.secondaryColor,
-    required this.homeUrl,
-    required this.ticketingUrl,
     required this.backendBaseUrl,
     required this.seedDashboard,
     required this.seedStaff,
@@ -21,8 +19,6 @@ class TeamSiteConfig {
   final String teamKeyword;
   final int primaryColor;
   final int secondaryColor;
-  final String homeUrl;
-  final String ticketingUrl;
   final String backendBaseUrl;
   final TeamDashboard seedDashboard;
   final List<StaffMember> seedStaff;
@@ -51,8 +47,6 @@ class TeamSiteConfig {
       teamKeyword: teamKeyword ?? this.teamKeyword,
       primaryColor: primaryColor ?? this.primaryColor,
       secondaryColor: secondaryColor ?? this.secondaryColor,
-      homeUrl: homeUrl ?? this.homeUrl,
-      ticketingUrl: ticketingUrl ?? this.ticketingUrl,
       backendBaseUrl: backendBaseUrl ?? this.backendBaseUrl,
       seedDashboard: seedDashboard ?? this.seedDashboard,
       seedStaff: seedStaff ?? this.seedStaff,
@@ -69,8 +63,6 @@ final defaultTeamConfig = TeamSiteConfig(
   teamKeyword: 'Varese',
   primaryColor: 0xFFE30613,
   secondaryColor: 0xFF8B0008,
-  homeUrl: 'https://www.pallacanestrovarese.it/it/',
-  ticketingUrl: 'https://pallacanestrovarese.vivaticket.it/',
   backendBaseUrl: 'http://localhost:3000',
   seedDashboard: TeamDashboard(
     news: const [

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-
+import '../errors/api_exception.dart';
 import '../config/team_config.dart';
 import '../models/team_content.dart';
 
@@ -70,9 +70,9 @@ class BasketballApiService {
     final uri = _buildUri(path, query: query);
     final response = await _client.get(uri).timeout(_timeout);
     if (response.statusCode == 404) return [];
-    if (response.statusCode >= 400) throw BasketballApiException('HTTP ${response.statusCode} on $uri');
+    if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
     final decoded = jsonDecode(response.body);
-    if (decoded is! List) throw BasketballApiException('Expected list response on $uri');
+    if (decoded is! List) throw ApiException('Expected list response on $uri');
     return decoded.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
   }
 
@@ -80,9 +80,9 @@ class BasketballApiService {
     final uri = _buildUri(path);
     final response = await _client.get(uri).timeout(_timeout);
     if (response.statusCode == 404) return null;
-    if (response.statusCode >= 400) throw BasketballApiException('HTTP ${response.statusCode} on $uri');
+    if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
     final decoded = jsonDecode(response.body);
-    if (decoded is! Map) throw BasketballApiException('Expected object response on $uri');
+    if (decoded is! Map) throw ApiException('Expected object response on $uri');
     return Map<String, dynamic>.from(decoded);
   }
 
@@ -152,13 +152,4 @@ class BasketballApiService {
         city: json['city']?.toString() ?? '',
         websiteUrl: json['website']?.toString() ?? _config.backendBaseUrl,
       );
-}
-
-class BasketballApiException implements Exception {
-  BasketballApiException(this.message);
-
-  final String message;
-
-  @override
-  String toString() => message;
 }

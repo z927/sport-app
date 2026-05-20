@@ -27,7 +27,7 @@ class NextGameCard extends StatelessWidget {
           colors: [Color(config.primaryColor), Color(config.secondaryColor)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-        ),
+        ),✨
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
