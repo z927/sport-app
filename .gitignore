@@ -12,3 +12,13 @@ dist/
 
 # Dart specific files
 .dart_tool/
+.idea/
+*.iml
+.metadata
+
+# Platform specific files
+android/
+ios/
+web/
+windows/
+linux/
