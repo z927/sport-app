@@ -10,6 +10,7 @@ class TeamSiteConfig {
     required this.teamUrl,
     required this.newsUrl,
     required this.ticketingUrl,
+    required this.backendBaseUrl,
     required this.rosterUrl,
     required this.staffUrl,
     required this.matchesUrl,
@@ -31,6 +32,7 @@ class TeamSiteConfig {
   final Uri teamUrl;
   final Uri newsUrl;
   final Uri ticketingUrl;
+  final Uri backendBaseUrl;
   final Uri rosterUrl;
   final Uri staffUrl;
   final Uri matchesUrl;
@@ -53,6 +55,7 @@ final defaultTeamConfig = TeamSiteConfig(
   teamUrl: Uri.https('www.pallacanestrovarese.it', '/squadra'),
   newsUrl: Uri.https('www.pallacanestrovarese.it', '/news'),
   ticketingUrl: Uri.https('pallacanestrovarese.vivaticket.it', '/'),
+  backendBaseUrl: Uri.parse('http://localhost:3000'),
   rosterUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/roster'),
   staffUrl: Uri.https('www.pallacanestrovarese.it', '/it/squadra/staff'),
   matchesUrl: Uri.https('www.pallacanestrovarese.it', '/it/stagione/calendario'),

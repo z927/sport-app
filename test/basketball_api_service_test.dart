@@ -1,42 +1,71 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:sports_team_app/config/team_config.dart';
-import 'package:sports_team_app/models/team_content.dart';
 import 'package:sports_team_app/services/basketball_api_service.dart';
-import 'package:sports_team_app/services/team_content_repository.dart';
-
-class _FakeRepository extends TeamContentRepository {
-  _FakeRepository(this.dashboard) : super(config: defaultTeamConfig);
-
-  final TeamDashboard dashboard;
-
-  @override
-  Future<TeamDashboard> loadDashboard() async => dashboard;
-}
 
 void main() {
-  group('BasketballApiService', () {
-    final dashboard = defaultTeamConfig.seedDashboard;
-    final service = BasketballApiService(
-      config: defaultTeamConfig,
-      repository: _FakeRepository(dashboard),
-    );
+  group('BasketballApiService backend integration contract', () {
+    test('calls news endpoint with limit and maps response', () async {
+      final client = MockClient((request) async {
+        expect(request.url.path, '/api/basketball/news');
+        expect(request.url.queryParameters['limit'], '1');
+        return http.Response(
+          jsonEncode([
+            {
+              'id': 'n1',
+              'title': 'News title',
+              'date': '2026-05-20',
+              'url': 'https://www.pallacanestrovarese.it/it/news/n1'
+            }
+          ]),
+          200,
+        );
+      });
 
-    test('returns limited news list', () async {
-      final items = await service.getNews(limit: 1);
-      expect(items, hasLength(1));
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final news = await service.getNews(limit: 1);
+
+      expect(news, hasLength(1));
+      expect(news.first.title, 'News title');
     });
 
-    test('resolves player by slug id', () async {
-      final player = await service.getPlayerById('carlos-stewart-jr');
-      expect(player, isNotNull);
-      expect(player!.number, '1');
+    test('returns null on 404 resource endpoint', () async {
+      final client = MockClient((request) async {
+        return http.Response('{"error":"not found"}', 404);
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final player = await service.getPlayerById('missing');
+      expect(player, isNull);
     });
 
-    test('returns seeded sections for media and profile', () async {
-      final videos = await service.getVideos(limit: 1);
+    test('maps standings and profile from backend payload', () async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/api/basketball/standings') {
+          return http.Response(jsonEncode([
+            {'team': 'Varese', 'points': 32, 'played': 22}
+          ]), 200);
+        }
+
+        if (request.url.path == '/api/basketball/team/profile') {
+          return http.Response(
+            jsonEncode({'name': 'Pallacanestro Varese', 'city': 'Varese', 'venue': 'Itelyum Arena'}),
+            200,
+          );
+        }
+
+        return http.Response('[]', 200);
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final standings = await service.getStandings();
       final profile = await service.getTeamProfile();
-      expect(videos.single.id, 'video-1');
-      expect(profile.name, 'Pallacanestro Varese');
+
+      expect(standings.single.points, 32);
+      expect(profile?.arena, 'Itelyum Arena');
     });
   });
 }

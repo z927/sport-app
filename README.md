@@ -48,9 +48,11 @@ flutter test
 flutter run
 ```
 
-## Flutter fan API layer
+## Flutter fan API client layer
 
-The app now includes a Flutter-side `BasketballApiService` that exposes a fan API contract inside the mobile client (no backend server required). It provides methods equivalent to:
+The app includes a Flutter-side `BasketballApiService` that calls the internal backend endpoints under `/api/basketball/*`. Configure `backendBaseUrl` in `TeamSiteConfig` (default: `http://localhost:3000`).
+
+It provides methods equivalent to:
 
 - `getNews(limit)`
 - `getNewsById(newsId)`
