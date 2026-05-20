@@ -47,3 +47,31 @@ flutter analyze
 flutter test
 flutter run
 ```
+
+## Flutter fan API client layer
+
+The app includes a Flutter-side `BasketballApiService` that calls the internal backend endpoints under `/api/basketball/*`. Configure `backendBaseUrl` in `TeamSiteConfig` (default: `http://localhost:3000`).
+
+### Backend server configuration
+
+By default, the app targets `http://localhost:3000`. You can override this at runtime with a Dart define:
+
+```bash
+flutter run --dart-define=BACKEND_BASE_URL=http://localhost:3000
+```
+
+For a different environment, replace the URL value (for example staging/prod).
+
+It provides methods equivalent to:
+
+- `getNews(limit)`
+- `getNewsById(newsId)`
+- `getVideos(limit)`
+- `getPhotos(limit)`
+- `getRoster()`
+- `getPlayerById(playerId)`
+- `getStaff()`
+- `getMatches()`
+- `getMatchById(matchId)`
+- `getStandings()`
+- `getTeamProfile()`
