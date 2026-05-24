@@ -24,9 +24,33 @@ class BasketballApiService {
   final TeamSiteConfig _config;
   final http.Client _client;
   final Duration _timeout;
+  String? _token;
 
   void dispose() {
     _client.close();
+  }
+
+  Future<String> _getToken() async {
+    if (_token != null) return _token!;
+
+    final uri = _buildUri('/auth/token');
+    final response = await _client.post(
+      uri,
+      headers: {'x-api-key': _config.apiKey},
+    ).timeout(_timeout);
+
+    if (response.statusCode >= 400) {
+      throw ApiException('Auth failed: HTTP ${response.statusCode}');
+    }
+
+    final decoded = jsonDecode(response.body);
+    final token = decoded['token'] as String?;
+    if (token == null) {
+      throw ApiException('Invalid token response');
+    }
+
+    _token = token;
+    return token;
   }
 
   Future<List<NewsItem>> getNews({int limit = 10}) async {
@@ -77,7 +101,7 @@ class BasketballApiService {
 
   Future<List<Map<String, dynamic>>> _getList(String path, {Map<String, String>? query}) async {
     final uri = _buildUri(path, query: query);
-    final response = await _client.get(uri).timeout(_timeout);
+    final response = await _getWithAuth(uri);
     if (response.statusCode == 404) return [];
     if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
     final decoded = jsonDecode(response.body);
@@ -87,12 +111,31 @@ class BasketballApiService {
 
   Future<Map<String, dynamic>?> _getObject(String path) async {
     final uri = _buildUri(path);
-    final response = await _client.get(uri).timeout(_timeout);
+    final response = await _getWithAuth(uri);
     if (response.statusCode == 404) return null;
     if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
     final decoded = jsonDecode(response.body);
     if (decoded is! Map) throw ApiException('Expected object response on $uri');
     return Map<String, dynamic>.from(decoded);
+  }
+
+  Future<http.Response> _getWithAuth(Uri uri) async {
+    final token = await _getToken();
+    var response = await _client.get(
+      uri,
+      headers: {'Authorization': 'Bearer $token'},
+    ).timeout(_timeout);
+
+    if (response.statusCode == 401) {
+      _token = null;
+      final newToken = await _getToken();
+      response = await _client.get(
+        uri,
+        headers: {'Authorization': 'Bearer $newToken'},
+      ).timeout(_timeout);
+    }
+
+    return response;
   }
 
   Uri _buildUri(String path, {Map<String, String>? query}) {

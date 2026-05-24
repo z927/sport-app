@@ -75,3 +75,9 @@ It provides methods equivalent to:
 - `getMatchById(matchId)`
 - `getStandings()`
 - `getTeamProfile()`
+
+### Mock Server
+
+## Run Mock server
+
+dart run tool/mock_server.dart
