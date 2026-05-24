@@ -7,6 +7,7 @@ class TeamSiteConfig {
     required this.primaryColor,
     required this.secondaryColor,
     required this.backendBaseUrl,
+    required this.apiKey,
     required this.seedDashboard,
     required this.seedStaff,
     required this.seedVideos,
@@ -20,6 +21,7 @@ class TeamSiteConfig {
   final int primaryColor;
   final int secondaryColor;
   final String backendBaseUrl;
+  final String apiKey;
   final TeamDashboard seedDashboard;
   final List<StaffMember> seedStaff;
   final List<MediaItem> seedVideos;
@@ -35,6 +37,7 @@ class TeamSiteConfig {
     String? homeUrl,
     String? ticketingUrl,
     String? backendBaseUrl,
+    String? apiKey,
     TeamDashboard? seedDashboard,
     List<StaffMember>? seedStaff,
     List<MediaItem>? seedVideos,
@@ -48,6 +51,7 @@ class TeamSiteConfig {
       primaryColor: primaryColor ?? this.primaryColor,
       secondaryColor: secondaryColor ?? this.secondaryColor,
       backendBaseUrl: backendBaseUrl ?? this.backendBaseUrl,
+      apiKey: apiKey ?? this.apiKey,
       seedDashboard: seedDashboard ?? this.seedDashboard,
       seedStaff: seedStaff ?? this.seedStaff,
       seedVideos: seedVideos ?? this.seedVideos,
@@ -63,7 +67,8 @@ final defaultTeamConfig = TeamSiteConfig(
   teamKeyword: 'Varese',
   primaryColor: 0xFFE30613,
   secondaryColor: 0xFF8B0008,
-  backendBaseUrl: 'http://localhost:3000',
+  backendBaseUrl: 'http://localhost:8090',
+  apiKey: 'dev-api-key',
   seedDashboard: TeamDashboard(
     news: const [
       NewsItem(

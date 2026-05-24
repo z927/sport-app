@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "844695528631",
+    "project_id": "varese-basket-app",
+    "storage_bucket": "varese-basket-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844695528631:android:018987dc3bb1048314d932",
+        "android_client_info": {
+          "package_name": "com.zasi.varese.basket.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY-UQxSD6ihMky1I_NXzX9Ct-ZmXGbYUE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

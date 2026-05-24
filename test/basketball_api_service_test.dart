@@ -10,8 +10,12 @@ void main() {
   group('BasketballApiService backend integration contract', () {
     test('calls news endpoint with limit and maps response', () async {
       final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+        }
         expect(request.url.path, '/api/basketball/news');
         expect(request.url.queryParameters['limit'], '1');
+        expect(request.headers['Authorization'], 'Bearer fake-jwt');
         return http.Response(
           jsonEncode([
             {
@@ -35,6 +39,9 @@ void main() {
     test('uses configured localhost backend for basketball endpoints', () async {
       final requestedUris = <Uri>[];
       final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+        }
         requestedUris.add(request.url);
         return http.Response('[]', 200);
       });
@@ -56,6 +63,9 @@ void main() {
 
     test('returns null on 404 resource endpoint', () async {
       final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+        }
         return http.Response('{"error":"not found"}', 404);
       });
 
@@ -66,6 +76,9 @@ void main() {
 
     test('maps standings and profile from backend payload', () async {
       final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+        }
         if (request.url.path == '/api/basketball/standings') {
           return http.Response(jsonEncode([
             {'team': 'Varese', 'points': 32, 'played': 22}
