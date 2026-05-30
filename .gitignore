@@ -16,6 +16,7 @@ dist/
 *.iml
 .metadata
 build/
+.flutter-plugins-dependencies
 
 # Platform specific files
 android/
