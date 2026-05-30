@@ -1,4 +1,4 @@
-name: Release & Tagging
+name: Release & Deploy
 
 on:
   push:
@@ -9,11 +9,15 @@ on:
 
 jobs:
   release:
+    name: Semantic Release
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       issues: write
+    outputs:
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
 
     steps:
       - name: Checkout
@@ -25,7 +29,7 @@ jobs:
         if: github.event_name == 'pull_request'
         uses: wagoid/commitlint-github-action@v5
 
-      - name: Ensure initial tag v0.0.0
+      - name: Ensure initial tag v0.0.1
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,22 +62,30 @@ jobs:
           git commit -m "chore(release): bump version to $NEW_VERSION+$BUILD_NUMBER [skip ci]"
           git push
 
+  deploy:
+    name: Deploy to App Distribution
+    needs: release
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
       - name: Setup Flutter
-        if: steps.semantic.outputs.new_release_published == 'true'
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
       - name: Install dependencies
-        if: steps.semantic.outputs.new_release_published == 'true'
         run: flutter pub get
 
       - name: Build Android APK
-        if: steps.semantic.outputs.new_release_published == 'true'
         run: flutter build apk --release
 
       - name: Upload to Firebase App Distribution
-        if: steps.semantic.outputs.new_release_published == 'true'
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID_ANDROID }}
