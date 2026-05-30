@@ -7,5 +7,7 @@ class PlayerMapper {
         number: json['number']?.toString() ?? '',
         name: json['name']?.toString() ?? '',
         profileUrl: json['url']?.toString() ?? json['profileUrl']?.toString() ?? fallbackUrl,
+        imageUrl: json['photo']?.toString() ?? '',
+        role: json['role']?.toString() ?? '',
       );
 }
