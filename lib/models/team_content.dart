@@ -15,11 +15,15 @@ class Player {
     required this.number,
     required this.name,
     required this.profileUrl,
+    required this.imageUrl,
+    this.role = '',
   });
 
   final String number;
   final String name;
   final String profileUrl;
+  final String imageUrl;
+  final String role;
 }
 
 enum GameStatus { scheduled, live, completed }
@@ -62,9 +66,9 @@ class ClubInfo {
   const ClubInfo({
     required this.name,
     required this.arena,
-    required this.email,
-    required this.phone,
-    required this.palmares,
+    this.email = '',
+    this.phone = '',
+    this.palmares = const [],
   });
 
   final String name;

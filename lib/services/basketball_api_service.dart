@@ -39,9 +39,11 @@ class BasketballApiService {
       headers: {'x-api-key': _config.apiKey},
     ).timeout(_timeout);
 
-    if (response.statusCode >= 400) {
+    if (response.statusCode < 200 || response.statusCode >= 300) {
       throw ApiException('Auth failed: HTTP ${response.statusCode}');
     }
+
+    _checkJsonResponse(response);
 
     final decoded = jsonDecode(response.body);
     final token = decoded['token'] as String?;
@@ -103,7 +105,11 @@ class BasketballApiService {
     final uri = _buildUri(path, query: query);
     final response = await _getWithAuth(uri);
     if (response.statusCode == 404) return [];
-    if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ApiException('HTTP ${response.statusCode} on $uri');
+    }
+
+    _checkJsonResponse(response);
     final decoded = jsonDecode(response.body);
     if (decoded is! List) throw ApiException('Expected list response on $uri');
     return decoded.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
@@ -113,10 +119,24 @@ class BasketballApiService {
     final uri = _buildUri(path);
     final response = await _getWithAuth(uri);
     if (response.statusCode == 404) return null;
-    if (response.statusCode >= 400) throw ApiException('HTTP ${response.statusCode} on $uri');
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ApiException('HTTP ${response.statusCode} on $uri');
+    }
+
+    _checkJsonResponse(response);
     final decoded = jsonDecode(response.body);
     if (decoded is! Map) throw ApiException('Expected object response on $uri');
     return Map<String, dynamic>.from(decoded);
+  }
+
+  void _checkJsonResponse(http.Response response) {
+    final contentType = response.headers['content-type'];
+    if (contentType == null || !contentType.contains('application/json')) {
+      throw ApiException(
+        'Unexpected response format: expected JSON, but received ${contentType ?? 'unknown'}. '
+        'Body starts with: ${response.body.substring(0, response.body.length > 50 ? 50 : response.body.length)}'
+      );
+    }
   }
 
   Future<http.Response> _getWithAuth(Uri uri) async {

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
 
-const int port = 8090;
+const int port = 3000;
 const String mockToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9';
 
 void main() async {

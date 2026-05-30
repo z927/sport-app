@@ -11,7 +11,7 @@ void main() {
     test('calls news endpoint with limit and maps response', () async {
       final client = MockClient((request) async {
         if (request.url.path == '/auth/token') {
-          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200, headers: {'content-type': 'application/json'});
         }
         expect(request.url.path, '/api/basketball/news');
         expect(request.url.queryParameters['limit'], '1');
@@ -26,6 +26,7 @@ void main() {
             }
           ]),
           200,
+          headers: {'content-type': 'application/json'},
         );
       });
 
@@ -40,10 +41,10 @@ void main() {
       final requestedUris = <Uri>[];
       final client = MockClient((request) async {
         if (request.url.path == '/auth/token') {
-          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200, headers: {'content-type': 'application/json'});
         }
         requestedUris.add(request.url);
-        return http.Response('[]', 200);
+        return http.Response('[]', 200, headers: {'content-type': 'application/json'});
       });
 
       final service = BasketballApiService(config: defaultTeamConfig, client: client);
@@ -64,7 +65,7 @@ void main() {
     test('returns null on 404 resource endpoint', () async {
       final client = MockClient((request) async {
         if (request.url.path == '/auth/token') {
-          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200, headers: {'content-type': 'application/json'});
         }
         return http.Response('{"error":"not found"}', 404);
       });
@@ -77,22 +78,23 @@ void main() {
     test('maps standings and profile from backend payload', () async {
       final client = MockClient((request) async {
         if (request.url.path == '/auth/token') {
-          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200);
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200, headers: {'content-type': 'application/json'});
         }
         if (request.url.path == '/api/basketball/standings') {
           return http.Response(jsonEncode([
             {'team': 'Varese', 'points': 32, 'played': 22}
-          ]), 200);
+          ]), 200, headers: {'content-type': 'application/json'});
         }
 
         if (request.url.path == '/api/basketball/team/profile') {
           return http.Response(
             jsonEncode({'name': 'Pallacanestro Varese', 'city': 'Varese', 'venue': 'Itelyum Arena'}),
             200,
+            headers: {'content-type': 'application/json'},
           );
         }
 
-        return http.Response('[]', 200);
+        return http.Response('[]', 200, headers: {'content-type': 'application/json'});
       });
 
       final service = BasketballApiService(config: defaultTeamConfig, client: client);

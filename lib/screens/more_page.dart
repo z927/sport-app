@@ -40,11 +40,6 @@ class MorePage extends StatelessWidget {
           title: const Text('Sito ufficiale'),
           subtitle: Text(dashboard.sourceUrl),
         ),
-        ListTile(
-          leading: const Icon(Icons.confirmation_number_outlined),
-          title: const Text('Biglietteria'),
-          subtitle: Text(config.ticketingUrl),
-        ),
       ],
     );
   }
