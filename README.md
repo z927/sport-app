@@ -50,17 +50,11 @@ flutter run
 
 ## Flutter fan API client layer
 
-The app includes a Flutter-side `BasketballApiService` that calls the internal backend endpoints under `/api/basketball/*`. Configure `backendBaseUrl` in `TeamSiteConfig` (default: `http://localhost:3000`).
+The app includes a Flutter-side `BasketballApiService` that calls the internal backend endpoints under `/api/basketball/*`. Configure `backendBaseUrl` in `TeamSiteConfig`.
 
 ### Backend server configuration
 
-By default, the app targets `http://localhost:3000`. You can override this at runtime with a Dart define:
-
-```bash
-flutter run --dart-define=BACKEND_BASE_URL=http://localhost:3000
-```
-
-For a different environment, replace the URL value (for example staging/prod).
+The app uses the `backendBaseUrl` defined in `lib/config/team_config.dart`.
 
 It provides methods equivalent to:
 
