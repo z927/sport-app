@@ -62,9 +62,9 @@ class ClubInfo {
   const ClubInfo({
     required this.name,
     required this.arena,
-    required this.email,
-    required this.phone,
-    required this.palmares,
+    this.email = '',
+    this.phone = '',
+    this.palmares = const [],
   });
 
   final String name;

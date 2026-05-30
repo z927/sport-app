@@ -47,7 +47,35 @@ class _DashboardShellState extends State<DashboardShell> {
     return FutureBuilder<TeamDashboard>(
       future: _dashboard,
       builder: (context, snapshot) {
-        final dashboard = snapshot.data ?? widget.config.seedDashboard;
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text(widget.config.appTitle)),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text('Errore durante il caricamento: ${snapshot.error}'),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _refresh,
+                    child: const Text('Riprova'),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(title: Text(widget.config.appTitle)),
+            body: const Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        final dashboard = snapshot.data!;
         final pages = [
           HomePage(
             dashboard: dashboard,
@@ -73,10 +101,7 @@ class _DashboardShellState extends State<DashboardShell> {
           ),
           body: AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
-            child: snapshot.connectionState == ConnectionState.waiting &&
-                    snapshot.data == null
-                ? const Center(child: CircularProgressIndicator())
-                : pages[_selectedIndex],
+            child: pages[_selectedIndex],
           ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: _selectedIndex,

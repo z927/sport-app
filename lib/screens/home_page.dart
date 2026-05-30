@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final nextGame = dashboard.games.firstWhere(
       (game) => game.status == GameStatus.scheduled,
       orElse: () => dashboard.games.first,
@@ -30,60 +31,156 @@ class HomePage extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () async => onRefresh(),
-      child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
-        children: [
-          NextGameCard(game: nextGame, config: config),
-          const SizedBox(height: 16),
-          Text(
-            'Ultime news',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          ...dashboard.news.take(3).map((item) => NewsTile(item: item)),
-          const SizedBox(height: 16),
-          Text(
-            'Ultimi highlights',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 8),
-          if (latestHighlights.isEmpty)
-            const ListTile(
-              dense: true,
-              contentPadding: EdgeInsets.zero,
-              leading: Icon(Icons.play_circle_outline),
-              title: Text('Nessun highlight disponibile al momento'),
-            )
-          else
-            ...latestHighlights.map(
-              (game) => ListTile(
-                dense: true,
-                contentPadding: EdgeInsets.zero,
-                leading: const Icon(Icons.play_circle_outline),
-                title: Text('${game.homeTeam} vs ${game.awayTeam}'),
-                subtitle: Text(game.dateLabel),
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 120.0,
+            floating: false,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                config.appTitle.toUpperCase(),
+                style: theme.textTheme.titleLarge?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(config.primaryColor),
+                      Color(config.secondaryColor),
+                    ],
+                  ),
+                ),
               ),
             ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: null,
-              child: const Text('Vai alla classifica'),
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
+              child: NextGameCard(game: nextGame, config: config),
             ),
           ),
-          const SizedBox(height: 16),
-          Text(
-            'Palmarès',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+          SliverToBoxAdapter(
+            child: _SectionHeader(title: 'Ultime news', color: Color(config.primaryColor)),
           ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: dashboard.clubInfo.palmares
-                .map((item) => Chip(label: Text(item)))
-                .toList(),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) => Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: NewsTile(item: dashboard.news[index]),
+                ),
+                childCount: dashboard.news.take(3).length,
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: _SectionHeader(title: 'Ultimi highlights', color: Color(config.primaryColor)),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: latestHighlights.isEmpty
+                  ? const Card(
+                      child: ListTile(
+                        leading: Icon(Icons.play_circle_outline),
+                        title: Text('Nessun highlight disponibile'),
+                      ),
+                    )
+                  : Column(
+                      children: latestHighlights
+                          .map(
+                            (game) => Card(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: ListTile(
+                                leading: Icon(Icons.play_circle_fill, color: Color(config.primaryColor)),
+                                title: Text(
+                                  '${game.homeTeam} vs ${game.awayTeam}',
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                subtitle: Text(game.dateLabel),
+                                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+            ),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: FilledButton.tonal(
+                onPressed: () {},
+                child: const Text('VAI ALLA CLASSIFICA'),
+              ),
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: _SectionHeader(title: 'Palmarès', color: Color(config.primaryColor)),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
+            sliver: SliverToBoxAdapter(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: dashboard.clubInfo.palmares
+                    .map((item) => Chip(
+                          label: Text(
+                            item,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                          side: BorderSide.none,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, required this.color});
+
+  final String title;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 12),
+      child: Row(
+        children: [
+          Container(
+            width: 4,
+            height: 24,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            title.toUpperCase(),
+            style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.1,
+                ),
           ),
         ],
       ),
