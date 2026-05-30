@@ -62,16 +62,13 @@ jobs:
           git commit -m "chore(release): bump version to $NEW_VERSION+$BUILD_NUMBER [skip ci]"
           git push
 
-  deploy:
-    name: Deploy to App Distribution
-    needs: release
-    if: github.event_name == 'push'
+  build:
+    name: Build & Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: main
           fetch-depth: 0
 
       - name: Setup Flutter
@@ -84,6 +81,30 @@ jobs:
 
       - name: Build Android APK
         run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  deploy:
+    name: Deploy to App Distribution
+    needs: [release, build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download APK
+        uses: actions/download-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/
 
       - name: Upload to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
