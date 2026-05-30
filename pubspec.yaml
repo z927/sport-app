@@ -1,7 +1,7 @@
 name: sports_team_app
 description: "Configurable Flutter mobile app for sports team news, live games, roster, and club links."
 publish_to: "none"
-version: 0.7.1+37
+version: 0.7.2+39
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
