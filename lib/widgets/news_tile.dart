@@ -19,7 +19,7 @@ class NewsTile extends StatelessWidget {
 
     final backgroundColor = isAlternate ? colorScheme.primary : colorScheme.surface;
     final textColor = isAlternate ? colorScheme.onPrimary : colorScheme.onSurface;
-    final dateColor = isAlternate ? colorScheme.onPrimary.withOpacity(0.8) : colorScheme.primary;
+    final dateColor = isAlternate ? colorScheme.onPrimary.withValues(alpha: 0.8) : colorScheme.primary;
     final buttonColor = isAlternate ? colorScheme.onPrimary : colorScheme.primary;
     final buttonTextColor = isAlternate ? colorScheme.primary : colorScheme.onPrimary;
 
@@ -31,83 +31,101 @@ class NewsTile extends StatelessWidget {
         side: isAlternate
             ? BorderSide.none
             : BorderSide(
-                color: colorScheme.outlineVariant.withOpacity(0.5),
+                color: colorScheme.outlineVariant.withValues(alpha: 0.5),
               ),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: () => _navigateToDetails(context),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (item.dateLabel.isNotEmpty)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12.0),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.calendar_today_outlined,
-                        size: 14,
-                        color: dateColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (item.imageUrl != null)
+              Hero(
+                tag: 'news_image_${item.url}',
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.network(
+                    item.imageUrl!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: colorScheme.surfaceContainerHighest,
+                      child: Icon(Icons.image_not_supported, color: colorScheme.outline),
+                    ),
+                  ),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (item.dateLabel.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: dateColor,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            item.dateLabel.toUpperCase(),
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: dateColor,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        item.dateLabel.toUpperCase(),
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: dateColor,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
+                    ),
+                  Text(
+                    item.title,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      color: textColor,
+                      fontWeight: FontWeight.w900,
+                      height: 1.2,
+                      letterSpacing: -0.5,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () => _navigateToDetails(context),
+                        style: TextButton.styleFrom(
+                          backgroundColor: buttonColor,
+                          foregroundColor: buttonTextColor,
+                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'LEGGI',
+                              style: theme.textTheme.labelLarge?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 1.2,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(Icons.arrow_forward_rounded, size: 18),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ),
-              Text(
-                item.title,
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: textColor,
-                  fontWeight: FontWeight.w900,
-                  height: 1.2,
-                  letterSpacing: -0.5,
-                ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () => _navigateToDetails(context),
-                    style: TextButton.styleFrom(
-                      backgroundColor: buttonColor,
-                      foregroundColor: buttonTextColor,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'LEGGI',
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.arrow_forward_rounded, size: 18),
-                      ],
-                    ),
-                  ),
                 ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -135,21 +153,61 @@ class _NewsDetailsPage extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar.large(
-            title: Text(
-              'NEWS',
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 2,
+          SliverAppBar(
+            expandedHeight: item.imageUrl != null ? 300 : 120,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                'NEWS',
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 2,
+                  color: item.imageUrl != null ? Colors.white : colorScheme.primary,
+                  shadows: item.imageUrl != null
+                      ? [
+                          const Shadow(
+                            offset: Offset(0, 2),
+                            blurRadius: 4,
+                            color: Colors.black54,
+                          ),
+                        ]
+                      : null,
+                ),
               ),
+              centerTitle: true,
+              background: item.imageUrl != null
+                  ? Hero(
+                      tag: 'news_image_${item.url}',
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Image.network(
+                            item.imageUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                          const DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black54,
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
             ),
-            centerTitle: true,
             backgroundColor: colorScheme.surface,
-            foregroundColor: colorScheme.primary,
+            foregroundColor: item.imageUrl != null ? Colors.white : colorScheme.primary,
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -157,9 +215,9 @@ class _NewsDetailsPage extends StatelessWidget {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                       decoration: BoxDecoration(
-                        color: colorScheme.primary.withOpacity(0.1),
+                        color: colorScheme.primary.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: colorScheme.primary.withOpacity(0.2)),
+                        border: Border.all(color: colorScheme.primary.withValues(alpha: 0.2)),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -210,8 +268,10 @@ class _NewsDetailsPage extends StatelessWidget {
                       label: const Text('LEGGI ARTICOLO COMPLETO'),
                       style: FilledButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                        shape: const StadiumBorder(),
+                        textStyle: theme.textTheme.labelLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.1,
                         ),
                       ),
                     ),
