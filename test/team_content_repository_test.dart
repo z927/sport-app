@@ -52,7 +52,13 @@ void main() {
           )
         ],
         players: const [
-          Player(number: '2', name: 'DAVIDE ALVITI', profileUrl: 'http://localhost:3000/p2'),
+          Player(
+            number: '2',
+            name: 'DAVIDE ALVITI',
+            profileUrl: 'http://localhost:3000/p2',
+            imageUrl: 'http://localhost:3000/p2.png',
+            role: 'Ala',
+          ),
         ],
         profile: const TeamProfile(
           name: 'Pallacanestro Varese',
