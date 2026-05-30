@@ -32,7 +32,6 @@ This project is a configurable Flutter application prototype for sports teams. I
 2.  **Local Backend**: Run the mock server with `dart run tool/mock_server.dart` (defaults to port 3000).
 3.  **Running the App**:
     - Default: `flutter run`
-    - Custom Backend: `flutter run --dart-define=BACKEND_BASE_URL=http://your-api.com`
 4.  **Quality Checks**:
     - Linting: `flutter analyze`
     - Testing: `flutter test`
