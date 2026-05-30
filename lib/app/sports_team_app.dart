@@ -10,18 +10,18 @@ class SportsTeamApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const vareseRed = Color(0xFFE30613);
-    const vareseDarkRed = Color(0xFF8B0008);
+    final primaryColor = Color(config.primaryColor);
+    final secondaryColor = Color(config.secondaryColor);
     const vareseWhite = Color(0xFFFFFFFF);
     const vareseBlack = Color(0xFF111111);
 
     final colorScheme = ColorScheme.fromSeed(
-      seedColor: vareseRed,
+      seedColor: primaryColor,
       brightness: Brightness.light,
     ).copyWith(
-      primary: vareseRed,
+      primary: primaryColor,
       onPrimary: vareseWhite,
-      secondary: vareseDarkRed,
+      secondary: secondaryColor,
       onSecondary: vareseWhite,
       surface: const Color(0xFFF8F8F9),
       onSurface: vareseBlack,
@@ -57,24 +57,24 @@ class SportsTeamApp extends StatelessWidget {
           ),
         ),
         chipTheme: ChipThemeData(
-          backgroundColor: const Color(0xFFFDEBEC),
-          side: const BorderSide(color: Color(0xFFF4C9CC)),
+          backgroundColor: primaryColor.withValues(alpha: 0.08),
+          side: BorderSide(color: primaryColor.withValues(alpha: 0.15)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           labelStyle: const TextStyle(fontWeight: FontWeight.w600),
         ),
         navigationBarTheme: NavigationBarThemeData(
           height: 72,
-          indicatorColor: vareseRed.withValues(alpha: 0.12),
+          indicatorColor: primaryColor.withValues(alpha: 0.12),
           backgroundColor: vareseWhite,
           labelTextStyle: WidgetStateProperty.resolveWith(
             (states) => TextStyle(
               fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-              color: states.contains(WidgetState.selected) ? vareseRed : const Color(0xFF6A6A70),
+              color: states.contains(WidgetState.selected) ? primaryColor : const Color(0xFF6A6A70),
             ),
           ),
           iconTheme: WidgetStateProperty.resolveWith(
             (states) => IconThemeData(
-              color: states.contains(WidgetState.selected) ? vareseRed : const Color(0xFF77777D),
+              color: states.contains(WidgetState.selected) ? primaryColor : const Color(0xFF77777D),
             ),
           ),
         ),
