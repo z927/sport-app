@@ -7,5 +7,6 @@ class NewsMapper {
         title: json['title']?.toString() ?? '',
         dateLabel: json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
         url: json['url']?.toString() ?? fallbackUrl,
+        imageUrl: json['coverImage']?.toString(),
       );
 }

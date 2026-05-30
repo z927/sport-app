@@ -3,11 +3,13 @@ class NewsItem {
     required this.title,
     required this.dateLabel,
     required this.url,
+    this.imageUrl,
   });
 
   final String title;
   final String dateLabel;
   final String url;
+  final String? imageUrl;
 }
 
 class Player {
