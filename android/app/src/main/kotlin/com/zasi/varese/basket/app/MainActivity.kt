@@ -1,4 +1,4 @@
-package com.example.sports_team_app
+package com.zasi.varese.basket.app
 
 import io.flutter.embedding.android.FlutterActivity
 
