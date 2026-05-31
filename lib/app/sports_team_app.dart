@@ -50,9 +50,11 @@ class SportsTeamApp extends StatelessWidget {
     ThemeData buildTheme(ColorScheme colorScheme) {
       final isDark = colorScheme.brightness == Brightness.dark;
       final surfaceColor = isDark ? const Color(0xFF121212) : vareseWhite;
-      final scaffoldBg = isDark ? const Color(0xFF0A0A0A) : const Color(0xFFF3F4F6);
+      final scaffoldBg =
+          isDark ? const Color(0xFF0A0A0A) : const Color(0xFFF3F4F6);
       final textColor = isDark ? vareseWhite : vareseBlack;
-      final borderColor = isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE6E6EA);
+      final borderColor =
+          isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE6E6EA);
 
       return ThemeData(
         useMaterial3: true,
@@ -83,7 +85,8 @@ class SportsTeamApp extends StatelessWidget {
         chipTheme: ChipThemeData(
           backgroundColor: primaryColor.withValues(alpha: 0.08),
           side: BorderSide(color: primaryColor.withValues(alpha: 0.15)),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           labelStyle: TextStyle(
             fontWeight: FontWeight.w600,
             color: isDark ? vareseWhite : vareseBlack,
@@ -95,13 +98,23 @@ class SportsTeamApp extends StatelessWidget {
           backgroundColor: surfaceColor,
           labelTextStyle: WidgetStateProperty.resolveWith(
             (states) => TextStyle(
-              fontWeight: states.contains(WidgetState.selected) ? FontWeight.w700 : FontWeight.w500,
-              color: states.contains(WidgetState.selected) ? primaryColor : (isDark ? const Color(0xFF8E8E93) : const Color(0xFF6A6A70)),
+              fontWeight: states.contains(WidgetState.selected)
+                  ? FontWeight.w700
+                  : FontWeight.w500,
+              color: states.contains(WidgetState.selected)
+                  ? primaryColor
+                  : (isDark
+                      ? const Color(0xFF8E8E93)
+                      : const Color(0xFF6A6A70)),
             ),
           ),
           iconTheme: WidgetStateProperty.resolveWith(
             (states) => IconThemeData(
-              color: states.contains(WidgetState.selected) ? primaryColor : (isDark ? const Color(0xFF8E8E93) : const Color(0xFF77777D)),
+              color: states.contains(WidgetState.selected)
+                  ? primaryColor
+                  : (isDark
+                      ? const Color(0xFF8E8E93)
+                      : const Color(0xFF77777D)),
             ),
           ),
         ),

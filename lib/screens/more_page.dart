@@ -145,8 +145,11 @@ class MorePage extends StatelessWidget {
                 children: info.palmares
                     .map((item) => Chip(
                           label: Text(item),
-                          backgroundColor: colorScheme.primaryContainer.withValues(alpha: 0.4),
-                          side: BorderSide(color: colorScheme.primary.withValues(alpha: 0.1)),
+                          backgroundColor: colorScheme.primaryContainer
+                              .withValues(alpha: 0.4),
+                          side: BorderSide(
+                              color:
+                                  colorScheme.primary.withValues(alpha: 0.1)),
                         ))
                     .toList(),
               ),
@@ -199,7 +202,7 @@ class MorePage extends StatelessWidget {
                 FutureBuilder<PackageInfo>(
                   future: PackageInfo.fromPlatform(),
                   builder: (context, snapshot) {
-                    final version = snapshot.hasData 
+                    final version = snapshot.hasData
                         ? 'Versione ${snapshot.data!.version} (${snapshot.data!.buildNumber})'
                         : 'Versione ...';
                     return Text(
