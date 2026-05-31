@@ -77,7 +77,10 @@ class HomePage extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 (context, index) => Padding(
                   padding: const EdgeInsets.only(bottom: 8.0),
-                  child: NewsTile(item: dashboard.news[index]),
+                  child: NewsTile(
+                    item: dashboard.news[index],
+                    isAlternate: index % 2 != 0,
+                  ),
                 ),
                 childCount: dashboard.news.take(3).length,
               ),

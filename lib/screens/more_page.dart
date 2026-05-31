@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app/theme_controller.dart';
 import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../widgets/section_header.dart';
@@ -10,11 +11,13 @@ class MorePage extends StatelessWidget {
   const MorePage({
     required this.dashboard,
     required this.config,
+    required this.themeController,
     super.key,
   });
 
   final TeamDashboard dashboard;
   final TeamSiteConfig config;
+  final ThemeController themeController;
 
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
@@ -85,9 +88,21 @@ class MorePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: SectionHeader(
-              title: 'Il Club',
+              title: 'Impostazioni',
               color: colorScheme.primary,
             ),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: SliverToBoxAdapter(
+            child: _ThemeSelectorCard(themeController: themeController),
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: SectionHeader(
+            title: 'Il Club',
+            color: colorScheme.primary,
           ),
         ),
         SliverPadding(
@@ -207,6 +222,102 @@ class MorePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class _ThemeSelectorCard extends StatelessWidget {
+  const _ThemeSelectorCard({required this.themeController});
+
+  final ThemeController themeController;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Card(
+      elevation: 0,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(color: colorScheme.outline.withValues(alpha: 0.5)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: colorScheme.primary.withValues(alpha: 0.08),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Icon(
+                    Icons.palette_outlined,
+                    color: colorScheme.primary,
+                    size: 24,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'TEMA APPLICAZIONE',
+                        style: theme.textTheme.labelMedium?.copyWith(
+                          color: theme.hintColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'Personalizza l\'aspetto',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            SegmentedButton<ThemeMode>(
+              segments: const [
+                ButtonSegment<ThemeMode>(
+                  value: ThemeMode.system,
+                  label: Text('Sistema'),
+                  icon: Icon(Icons.brightness_auto),
+                ),
+                ButtonSegment<ThemeMode>(
+                  value: ThemeMode.light,
+                  label: Text('Chiaro'),
+                  icon: Icon(Icons.light_mode),
+                ),
+                ButtonSegment<ThemeMode>(
+                  value: ThemeMode.dark,
+                  label: Text('Scuro'),
+                  icon: Icon(Icons.dark_mode),
+                ),
+              ],
+              selected: {themeController.themeMode},
+              onSelectionChanged: (Set<ThemeMode> newSelection) {
+                themeController.updateThemeMode(newSelection.first);
+              },
+              style: SegmentedButton.styleFrom(
+                selectedBackgroundColor: colorScheme.primary,
+                selectedForegroundColor: colorScheme.onPrimary,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
