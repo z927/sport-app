@@ -4,6 +4,7 @@ import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../widgets/news_tile.dart';
 import '../widgets/next_game_card.dart';
+import '../widgets/section_header.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({
@@ -68,7 +69,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: _SectionHeader(title: 'Ultime news', color: Color(config.primaryColor)),
+            child: SectionHeader(title: 'Ultime news', color: Color(config.primaryColor)),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -83,7 +84,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: _SectionHeader(title: 'Ultimi highlights', color: Color(config.primaryColor)),
+            child: SectionHeader(title: 'Ultimi highlights', color: Color(config.primaryColor)),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
