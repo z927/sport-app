@@ -17,15 +17,22 @@ class NewsTile extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final isDark = theme.brightness == Brightness.dark;
     final backgroundColor = isAlternate ? colorScheme.primary : colorScheme.surface;
-    final textColor = isAlternate ? colorScheme.onPrimary : colorScheme.onSurface;
-    final dateColor = isAlternate ? colorScheme.onPrimary.withValues(alpha: 0.8) : colorScheme.primary;
-    final buttonColor = isAlternate ? colorScheme.onPrimary : colorScheme.primary;
-    final buttonTextColor = isAlternate ? colorScheme.primary : colorScheme.onPrimary;
+    final textColor = isAlternate ? colorScheme.onPrimary : (isDark ? colorScheme.onSurface : colorScheme.primary);
+    final dateColor = isAlternate ? colorScheme.onPrimary.withValues(alpha: 0.8) : (isDark ? colorScheme.onSurfaceVariant : colorScheme.primary);
+    
+    final buttonColor = isAlternate 
+        ? Colors.white 
+        : (isDark ? colorScheme.primaryContainer : colorScheme.primary);
+    final buttonTextColor = isAlternate 
+        ? colorScheme.primary 
+        : (isDark ? colorScheme.onPrimaryContainer : colorScheme.onPrimary);
 
     return Card(
-      elevation: isAlternate ? 4 : 0,
+      elevation: isAlternate ? 4 : 2,
       color: backgroundColor,
+      shadowColor: Colors.black.withValues(alpha: 0.1),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: isAlternate
@@ -267,6 +274,13 @@ class _NewsDetailsPage extends StatelessWidget {
                       icon: const Icon(Icons.open_in_new),
                       label: const Text('LEGGI ARTICOLO COMPLETO'),
                       style: FilledButton.styleFrom(
+                        backgroundColor: theme.brightness == Brightness.dark 
+                            ? colorScheme.primary 
+                            : Colors.white,
+                        foregroundColor: theme.brightness == Brightness.dark 
+                            ? colorScheme.onPrimary 
+                            : colorScheme.primary,
+                        elevation: 2,
                         padding: const EdgeInsets.symmetric(vertical: 18),
                         shape: const StadiumBorder(),
                         textStyle: theme.textTheme.labelLarge?.copyWith(

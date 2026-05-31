@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../app/theme_controller.dart';
 import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../services/team_content_repository.dart';
+import '../widgets/skeletons.dart';
 import 'home_page.dart';
 import 'live_page.dart';
 import 'more_page.dart';
@@ -10,9 +12,14 @@ import 'news_page.dart';
 import 'team_page.dart';
 
 class DashboardShell extends StatefulWidget {
-  const DashboardShell({required this.config, super.key});
+  const DashboardShell({
+    required this.config,
+    required this.themeController,
+    super.key,
+  });
 
   final TeamSiteConfig config;
+  final ThemeController themeController;
 
   @override
   State<DashboardShell> createState() => _DashboardShellState();
@@ -71,7 +78,7 @@ class _DashboardShellState extends State<DashboardShell> {
         if (!snapshot.hasData && snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
             appBar: AppBar(title: Text(widget.config.appTitle)),
-            body: const Center(child: CircularProgressIndicator()),
+            body: const SkeletonDashboard(),
           );
         }
 
@@ -85,7 +92,11 @@ class _DashboardShellState extends State<DashboardShell> {
           NewsPage(items: dashboard.news),
           LivePage(games: dashboard.games),
           TeamPage(players: dashboard.players),
-          MorePage(dashboard: dashboard, config: widget.config),
+          MorePage(
+            dashboard: dashboard,
+            config: widget.config,
+            themeController: widget.themeController,
+          ),
         ];
 
         return Scaffold(
