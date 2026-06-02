@@ -16,6 +16,8 @@ class TeamContentRepository {
     _apiService.dispose();
   }
 
+  Future<Player?> getPlayerById(String playerId) => _apiService.getPlayerById(playerId);
+
   Future<TeamDashboard> loadDashboard() async {
     final results = await Future.wait([
       _apiService.getNews(limit: 12),

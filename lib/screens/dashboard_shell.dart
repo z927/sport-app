@@ -91,7 +91,10 @@ class _DashboardShellState extends State<DashboardShell> {
           ),
           NewsPage(items: dashboard.news),
           LivePage(games: dashboard.games),
-          TeamPage(players: dashboard.players),
+          TeamPage(
+            players: dashboard.players,
+            loadPlayerDetails: _repository.getPlayerById,
+          ),
           MorePage(
             dashboard: dashboard,
             config: widget.config,
