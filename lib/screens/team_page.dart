@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../models/team_content.dart';
 
+typedef PlayerDetailsLoader = Future<Player?> Function(String playerId);
+
 class TeamPage extends StatelessWidget {
-  const TeamPage({required this.players, super.key});
+  const TeamPage({required this.players, this.loadPlayerDetails, super.key});
 
   final List<Player> players;
+  final PlayerDetailsLoader? loadPlayerDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,10 @@ class TeamPage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final player = players[index];
-                return _PlayerCard(player: player);
+                return _PlayerCard(
+                  player: player,
+                  loadPlayerDetails: loadPlayerDetails,
+                );
               },
               childCount: players.length,
             ),
@@ -34,9 +40,10 @@ class TeamPage extends StatelessWidget {
 }
 
 class _PlayerCard extends StatelessWidget {
-  const _PlayerCard({required this.player});
+  const _PlayerCard({required this.player, this.loadPlayerDetails});
 
   final Player player;
+  final PlayerDetailsLoader? loadPlayerDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +58,10 @@ class _PlayerCard extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
-              builder: (_) => _PlayerDetailsPage(player: player),
+              builder: (_) => _PlayerDetailsPage(
+                player: player,
+                loadPlayerDetails: loadPlayerDetails,
+              ),
             ),
           );
         },
@@ -154,10 +164,27 @@ class _PlayerCard extends StatelessWidget {
   }
 }
 
-class _PlayerDetailsPage extends StatelessWidget {
-  const _PlayerDetailsPage({required this.player});
+class _PlayerDetailsPage extends StatefulWidget {
+  const _PlayerDetailsPage({required this.player, this.loadPlayerDetails});
 
   final Player player;
+  final PlayerDetailsLoader? loadPlayerDetails;
+
+  @override
+  State<_PlayerDetailsPage> createState() => _PlayerDetailsPageState();
+}
+
+class _PlayerDetailsPageState extends State<_PlayerDetailsPage> {
+  late final Future<Player?>? _playerDetailsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    final loader = widget.loadPlayerDetails;
+    _playerDetailsFuture = loader == null || widget.player.id.isEmpty
+        ? null
+        : loader(widget.player.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -172,20 +199,20 @@ class _PlayerDetailsPage extends StatelessWidget {
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(
-                player.name.toUpperCase(),
+                widget.player.name.toUpperCase(),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   shadows: [Shadow(blurRadius: 10, color: Colors.black)],
                 ),
               ),
               background: Hero(
-                tag: 'player_image_${player.number}',
+                tag: 'player_image_${widget.player.number}',
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    if (player.imageUrl.isNotEmpty)
+                    if (widget.player.imageUrl.isNotEmpty)
                       Image.network(
-                        player.imageUrl,
+                        widget.player.imageUrl,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) => Container(
                           color: colorScheme.surfaceContainerHighest,
@@ -211,50 +238,102 @@ class _PlayerDetailsPage extends StatelessWidget {
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildListDelegate([
+          SliverToBoxAdapter(
+            child: FutureBuilder<Player?>(
+              future: _playerDetailsFuture,
+              builder: (context, snapshot) {
+                final detailedPlayer = snapshot.data ?? widget.player;
+                return _PlayerDetailsContent(
+                  player: detailedPlayer,
+                  isLoading: snapshot.connectionState == ConnectionState.waiting,
+                  hasLoadError: snapshot.hasError,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PlayerDetailsContent extends StatelessWidget {
+  const _PlayerDetailsContent({
+    required this.player,
+    required this.isLoading,
+    required this.hasLoadError,
+  });
+
+  final Player player;
+  final bool isLoading;
+  final bool hasLoadError;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final biography = player.biography.trim();
+
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              _infoChip(context, 'Numero', '#${player.number}'),
+              const SizedBox(width: 12),
+              _infoChip(context, 'Ruolo', player.role),
+            ],
+          ),
+          const SizedBox(height: 32),
+          Text(
+            'BIOGRAFIA',
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (isLoading) ...[
+            const LinearProgressIndicator(),
+            const SizedBox(height: 12),
+            Text(
+              'Caricamento della biografia in corso...',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ] else ...[
+            if (hasLoadError)
               Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        _infoChip(context, 'Numero', '#${player.number}'),
-                        const SizedBox(width: 12),
-                        _infoChip(context, 'Ruolo', player.role),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    Text(
-                      'BIOGRAFIA',
-                      style: theme.textTheme.titleSmall?.copyWith(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Informazioni dettagliate su ${player.name} non disponibili in questa vista. Visita il profilo completo per maggiori dettagli.',
-                      style: theme.textTheme.bodyLarge?.copyWith(height: 1.6),
-                    ),
-                    const SizedBox(height: 32),
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        // In a real app, use url_launcher
-                      },
-                      icon: const Icon(Icons.open_in_new),
-                      label: const Text('PROFILO COMPLETO'),
-                      style: OutlinedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Non è stato possibile aggiornare la biografia dal profilo completo.',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: colorScheme.error,
+                  ),
                 ),
               ),
-            ]),
+            Text(
+              biography.isEmpty
+                  ? 'Biografia di ${player.name} non disponibile.'
+                  : biography,
+              style: theme.textTheme.bodyLarge?.copyWith(height: 1.6),
+            ),
+          ],
+          const SizedBox(height: 32),
+          OutlinedButton.icon(
+            onPressed: () {
+              // In a real app, use url_launcher
+            },
+            icon: const Icon(Icons.open_in_new),
+            label: const Text('PROFILO COMPLETO'),
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 50),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            ),
           ),
         ],
       ),

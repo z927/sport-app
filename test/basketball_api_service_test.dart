@@ -75,6 +75,34 @@ void main() {
       expect(player, isNull);
     });
 
+
+    test('maps player biography from backend payload', () async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200, headers: {'content-type': 'application/json'});
+        }
+        expect(request.url.path, '/api/basketball/team/players/davide-alviti');
+        return http.Response(
+          jsonEncode({
+            'id': 'davide-alviti',
+            'name': 'DAVIDE ALVITI',
+            'number': '2',
+            'role': 'Ala',
+            'photo': 'http://localhost:3000/p2.png',
+            'bio': 'Davide Alviti nasce ad Alatri il 5 novembre 1996.',
+          }),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final player = await service.getPlayerById('davide-alviti');
+
+      expect(player?.id, 'davide-alviti');
+      expect(player?.biography, 'Davide Alviti nasce ad Alatri il 5 novembre 1996.');
+    });
+
     test('maps standings and profile from backend payload', () async {
       final client = MockClient((request) async {
         if (request.url.path == '/auth/token') {

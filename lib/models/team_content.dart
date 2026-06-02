@@ -18,14 +18,18 @@ class Player {
     required this.name,
     required this.profileUrl,
     required this.imageUrl,
+    this.id = '',
     this.role = '',
+    this.biography = '',
   });
 
+  final String id;
   final String number;
   final String name;
   final String profileUrl;
   final String imageUrl;
   final String role;
+  final String biography;
 }
 
 enum GameStatus { scheduled, live, completed }
