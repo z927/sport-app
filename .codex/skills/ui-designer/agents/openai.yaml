@@ -1,0 +1,7 @@
+interface:
+  display_name: "UI Designer"
+  short_description: "Flutter Material 3 sports UI workflow"
+  brand_color: "#E30613"
+  default_prompt: "Use $ui-designer to refine a Flutter sports app screen with Material 3 styling."
+policy:
+  allow_implicit_invocation: true
