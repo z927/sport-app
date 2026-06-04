@@ -4,9 +4,14 @@ import '../models/team_content.dart';
 import '../widgets/news_tile.dart';
 
 class NewsPage extends StatelessWidget {
-  const NewsPage({required this.items, super.key});
+  const NewsPage({
+    required this.items,
+    this.loadNewsDetails,
+    super.key,
+  });
 
   final List<NewsItem> items;
+  final Future<NewsItem?> Function(String newsId)? loadNewsDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +20,7 @@ class NewsPage extends StatelessWidget {
       itemBuilder: (context, index) => NewsTile(
         item: items[index],
         isAlternate: index % 2 != 0,
+        loadDetails: loadNewsDetails,
       ),
       separatorBuilder: (_, __) => const SizedBox(height: 16),
       itemCount: items.length,

@@ -3,13 +3,35 @@ class NewsItem {
     required this.title,
     required this.dateLabel,
     required this.url,
+    this.id = '',
+    this.summary = '',
+    this.content = '',
     this.imageUrl,
   });
 
+  final String id;
   final String title;
   final String dateLabel;
   final String url;
+  final String summary;
+  final String content;
   final String? imageUrl;
+
+  bool get hasDetails => summary.trim().isNotEmpty || content.trim().isNotEmpty;
+
+  NewsItem mergeDetails(NewsItem? details) {
+    if (details == null) return this;
+
+    return NewsItem(
+      id: details.id.isNotEmpty ? details.id : id,
+      title: details.title.isNotEmpty ? details.title : title,
+      dateLabel: details.dateLabel.isNotEmpty ? details.dateLabel : dateLabel,
+      url: details.url.isNotEmpty ? details.url : url,
+      summary: details.summary.isNotEmpty ? details.summary : summary,
+      content: details.content.isNotEmpty ? details.content : content,
+      imageUrl: details.imageUrl ?? imageUrl,
+    );
+  }
 }
 
 class Player {

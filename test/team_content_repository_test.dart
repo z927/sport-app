@@ -21,6 +21,16 @@ class _FakeBasketballApiService extends BasketballApiService {
   Future<List<NewsItem>> getNews({int limit = 10}) async => news;
 
   @override
+  Future<NewsItem?> getNewsById(String newsId) async => news.firstWhere(
+        (item) => item.id == newsId,
+        orElse: () => const NewsItem(
+          title: '',
+          dateLabel: '',
+          url: '',
+        ),
+      );
+
+  @override
   Future<List<Game>> getMatches() async => games;
 
   @override
@@ -38,7 +48,13 @@ void main() {
     test('builds dashboard from backend responses only', () async {
       final api = _FakeBasketballApiService(
         news: const [
-          NewsItem(title: 'Backend News', dateLabel: '13/05/2026', url: 'http://localhost:3000/n1'),
+          NewsItem(
+            id: 'n1',
+            title: 'Backend News',
+            dateLabel: '13/05/2026',
+            url: 'http://localhost:3000/n1',
+            content: 'Full backend article',
+          ),
         ],
         games: const [
           Game(
@@ -76,6 +92,9 @@ void main() {
       expect(dashboard.players.single.name, 'DAVIDE ALVITI');
       expect(dashboard.clubInfo.name, 'Pallacanestro Varese');
       expect(dashboard.sourceUrl, defaultTeamConfig.backendBaseUrl);
+
+      final detail = await repository.getNewsById('n1');
+      expect(detail?.content, 'Full backend article');
     });
   });
 }

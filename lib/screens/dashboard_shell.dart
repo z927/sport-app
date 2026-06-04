@@ -88,8 +88,12 @@ class _DashboardShellState extends State<DashboardShell> {
             dashboard: dashboard,
             config: widget.config,
             onRefresh: _refresh,
+            loadNewsDetails: _repository.getNewsById,
           ),
-          NewsPage(items: dashboard.news),
+          NewsPage(
+            items: dashboard.news,
+            loadNewsDetails: _repository.getNewsById,
+          ),
           LivePage(games: dashboard.games),
           TeamPage(
             players: dashboard.players,

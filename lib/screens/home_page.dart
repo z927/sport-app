@@ -11,12 +11,14 @@ class HomePage extends StatelessWidget {
     required this.dashboard,
     required this.config,
     required this.onRefresh,
+    this.loadNewsDetails,
     super.key,
   });
 
   final TeamDashboard dashboard;
   final TeamSiteConfig config;
   final VoidCallback onRefresh;
+  final Future<NewsItem?> Function(String newsId)? loadNewsDetails;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ class HomePage extends StatelessWidget {
                   child: NewsTile(
                     item: dashboard.news[index],
                     isAlternate: index % 2 != 0,
+                    loadDetails: loadNewsDetails,
                   ),
                 ),
                 childCount: dashboard.news.take(3).length,
