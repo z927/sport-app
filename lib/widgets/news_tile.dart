@@ -21,12 +21,21 @@ class NewsTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     final isDark = theme.brightness == Brightness.dark;
-    final backgroundColor = isAlternate ? colorScheme.primary : colorScheme.surface;
-    final textColor = isAlternate ? colorScheme.onPrimary : (isDark ? colorScheme.onSurface : colorScheme.primary);
-    final dateColor = isAlternate ? colorScheme.onPrimary.withValues(alpha: 0.8) : (isDark ? colorScheme.onSurfaceVariant : colorScheme.primary);
+    final backgroundColor =
+        isAlternate ? colorScheme.primary : colorScheme.surface;
+    final textColor = isAlternate
+        ? colorScheme.onPrimary
+        : (isDark ? colorScheme.onSurface : colorScheme.primary);
+    final dateColor = isAlternate
+        ? colorScheme.onPrimary.withValues(alpha: 0.8)
+        : (isDark ? colorScheme.onSurfaceVariant : colorScheme.primary);
 
-    final buttonColor = isAlternate ? Colors.white : (isDark ? colorScheme.primaryContainer : colorScheme.primary);
-    final buttonTextColor = isAlternate ? colorScheme.primary : (isDark ? colorScheme.onPrimaryContainer : colorScheme.onPrimary);
+    final buttonColor = isAlternate
+        ? Colors.white
+        : (isDark ? colorScheme.primaryContainer : colorScheme.primary);
+    final buttonTextColor = isAlternate
+        ? colorScheme.primary
+        : (isDark ? colorScheme.onPrimaryContainer : colorScheme.onPrimary);
 
     return Card(
       elevation: isAlternate ? 4 : 2,
@@ -56,7 +65,8 @@ class NewsTile extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
                       color: colorScheme.surfaceContainerHighest,
-                      child: Icon(Icons.image_not_supported, color: colorScheme.outline),
+                      child: Icon(Icons.image_not_supported,
+                          color: colorScheme.outline),
                     ),
                   ),
                 ),
@@ -104,7 +114,9 @@ class NewsTile extends StatelessWidget {
                     Text(
                       item.summary,
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        color: isAlternate ? colorScheme.onPrimary.withValues(alpha: 0.86) : colorScheme.onSurfaceVariant,
+                        color: isAlternate
+                            ? colorScheme.onPrimary.withValues(alpha: 0.86)
+                            : colorScheme.onSurfaceVariant,
                         height: 1.45,
                       ),
                       maxLines: 2,
@@ -120,7 +132,8 @@ class NewsTile extends StatelessWidget {
                         style: TextButton.styleFrom(
                           backgroundColor: buttonColor,
                           foregroundColor: buttonTextColor,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24, vertical: 12),
                           shape: const StadiumBorder(),
                         ),
                         child: Row(
@@ -173,7 +186,8 @@ class NewsDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final detailFuture = item.id.isEmpty || loadDetails == null ? null : loadDetails!(item.id);
+    final detailFuture =
+        item.id.isEmpty || loadDetails == null ? null : loadDetails!(item.id);
 
     return Scaffold(
       body: detailFuture == null
@@ -184,7 +198,8 @@ class NewsDetailsPage extends StatelessWidget {
                 final detailedItem = item.mergeDetails(snapshot.data);
                 return _NewsDetailsContent(
                   item: detailedItem,
-                  isLoading: snapshot.connectionState == ConnectionState.waiting,
+                  isLoading:
+                      snapshot.connectionState == ConnectionState.waiting,
                   hasError: snapshot.hasError,
                 );
               },
@@ -226,7 +241,8 @@ class _NewsDetailsContent extends StatelessWidget {
               style: theme.textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w900,
                 letterSpacing: 2,
-                color: item.imageUrl != null ? Colors.white : colorScheme.primary,
+                color:
+                    item.imageUrl != null ? Colors.white : colorScheme.primary,
                 shadows: item.imageUrl != null
                     ? [
                         const Shadow(
@@ -248,9 +264,11 @@ class _NewsDetailsContent extends StatelessWidget {
                         Image.network(
                           item.imageUrl!,
                           fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => Container(
+                          errorBuilder: (context, error, stackTrace) =>
+                              Container(
                             color: colorScheme.surfaceContainerHighest,
-                            child: Icon(Icons.image_not_supported, color: colorScheme.outline),
+                            child: Icon(Icons.image_not_supported,
+                                color: colorScheme.outline),
                           ),
                         ),
                         const DecoratedBox(
@@ -282,14 +300,16 @@ class _NewsDetailsContent extends StatelessWidget {
                   ),
           ),
           backgroundColor: colorScheme.surface,
-          foregroundColor: item.imageUrl != null ? Colors.white : colorScheme.primary,
+          foregroundColor:
+              item.imageUrl != null ? Colors.white : colorScheme.primary,
         ),
         SliverToBoxAdapter(
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 760),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -361,7 +381,9 @@ class _NewsDetailsContent extends StatelessWidget {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.icon(
-                        onPressed: item.url.isEmpty ? null : () => _openArticle(context, item.url),
+                        onPressed: item.url.isEmpty
+                            ? null
+                            : () => _openArticle(context, item.url),
                         icon: const Icon(Icons.open_in_new),
                         label: const Text('LEGGI ARTICOLO ORIGINALE'),
                         style: FilledButton.styleFrom(
@@ -393,7 +415,8 @@ class _NewsDetailsContent extends StatelessWidget {
     final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!launched) {
       messenger.showSnackBar(
-        const SnackBar(content: Text('Impossibile aprire il link della notizia.')),
+        const SnackBar(
+            content: Text('Impossibile aprire il link della notizia.')),
       );
     }
   }
@@ -452,22 +475,10 @@ class _NewsMetaRow extends StatelessWidget {
           label: item.hasDetails ? 'CONTENUTO COMPLETO' : 'ANTEPRIMA NEWS',
         ),
         DecoratedBox(
-          decoration: BoxDecoration(
-            color: colorScheme.primary,
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-            child: Text(
-              'VARESE BASKET',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: colorScheme.onPrimary,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
-        ),
+            decoration: BoxDecoration(
+          color: colorScheme.primary,
+          borderRadius: BorderRadius.circular(999),
+        )),
       ],
     );
   }
