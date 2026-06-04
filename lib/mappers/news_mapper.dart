@@ -8,12 +8,38 @@ class NewsMapper {
   static NewsItem fromJson(Map<String, dynamic> json, {required String fallbackUrl}) => NewsItem(
         id: json['id']?.toString() ?? '',
         title: _plainText(json['title']),
-        dateLabel: json['publishedAt']?.toString() ?? json['date']?.toString() ?? json['dateLabel']?.toString() ?? '',
+        dateLabel: _humanReadableDate(json['publishedAt'] ?? json['date'] ?? json['dateLabel']),
         url: json['url']?.toString() ?? fallbackUrl,
         summary: _plainText(json['summary']),
         content: _normalizedContent(json['content'] ?? json['body'] ?? json['description']),
         imageUrl: json['coverImage']?.toString() ?? json['imageUrl']?.toString(),
       );
+
+  static String _humanReadableDate(Object? value) {
+    final source = value?.toString().trim() ?? '';
+    if (source.isEmpty) return '';
+
+    final parsed = DateTime.tryParse(source);
+    if (parsed == null) return source;
+
+    final date = parsed.toUtc();
+    const months = [
+      'gennaio',
+      'febbraio',
+      'marzo',
+      'aprile',
+      'maggio',
+      'giugno',
+      'luglio',
+      'agosto',
+      'settembre',
+      'ottobre',
+      'novembre',
+      'dicembre',
+    ];
+
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
+  }
 
   static String _plainText(Object? value) {
     final source = value?.toString().trim() ?? '';

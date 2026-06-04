@@ -40,7 +40,7 @@ void main() {
       expect(news.first.title, 'News title');
       expect(news.first.summary, 'Short preview');
       expect(news.first.content, 'First paragraph.\n\nSecond paragraph.');
-      expect(news.first.dateLabel, '2026-05-20');
+      expect(news.first.dateLabel, '20 maggio 2026');
     });
 
 
@@ -71,6 +71,7 @@ void main() {
 
       expect(news, isNotNull);
       expect(news!.id, 'n1');
+      expect(news.dateLabel, '20 maggio 2026');
       expect(news.content, 'Full article content.\n\nPost game quotes.');
       expect(news.hasDetails, isTrue);
     });

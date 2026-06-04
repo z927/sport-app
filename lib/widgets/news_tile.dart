@@ -306,6 +306,11 @@ class _NewsDetailsContent extends StatelessWidget {
                     ),
                     if (item.summary.isNotEmpty) ...[
                       const SizedBox(height: 20),
+                      _SectionLabel(
+                        icon: Icons.short_text_rounded,
+                        label: 'Sommario',
+                      ),
+                      const SizedBox(height: 10),
                       Text(
                         item.summary,
                         style: theme.textTheme.titleMedium?.copyWith(
@@ -322,6 +327,11 @@ class _NewsDetailsContent extends StatelessWidget {
                       const _NewsContentSkeleton(),
                     ] else if (paragraphs.isNotEmpty) ...[
                       const SizedBox(height: 28),
+                      _SectionLabel(
+                        icon: Icons.article_outlined,
+                        label: 'Articolo',
+                      ),
+                      const SizedBox(height: 14),
                       Semantics(
                         label: 'Contenuto completo della notizia',
                         child: Column(
@@ -386,6 +396,35 @@ class _NewsDetailsContent extends StatelessWidget {
         const SnackBar(content: Text('Impossibile aprire il link della notizia.')),
       );
     }
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 18, color: colorScheme.primary),
+        const SizedBox(width: 8),
+        Text(
+          label.toUpperCase(),
+          style: theme.textTheme.labelLarge?.copyWith(
+            color: colorScheme.primary,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.1,
+          ),
+        ),
+      ],
+    );
   }
 }
 
