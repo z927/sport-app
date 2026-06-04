@@ -1,0 +1,7 @@
+interface:
+  display_name: "API Designer"
+  short_description: "Pallacanestro Varese API contracts"
+  brand_color: "#E30613"
+  default_prompt: "Use $api-designer to implement or review a Pallacanestro Varese basketball API change."
+policy:
+  allow_implicit_invocation: true
