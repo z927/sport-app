@@ -18,6 +18,8 @@ class TeamContentRepository {
 
   Future<Player?> getPlayerById(String playerId) => _apiService.getPlayerById(playerId);
 
+  Future<NewsItem?> getNewsById(String newsId) => _apiService.getNewsById(newsId);
+
   Future<TeamDashboard> loadDashboard() async {
     final results = await Future.wait([
       _apiService.getNews(limit: 12),
