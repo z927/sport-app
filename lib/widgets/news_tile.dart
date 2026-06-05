@@ -30,12 +30,11 @@ class NewsTile extends StatelessWidget {
         ? colorScheme.onPrimary.withValues(alpha: 0.8)
         : (isDark ? colorScheme.onSurfaceVariant : colorScheme.primary);
 
-    final buttonColor = isAlternate
-        ? Colors.white
-        : (isDark ? colorScheme.primaryContainer : colorScheme.primary);
-    final buttonTextColor = isAlternate
-        ? colorScheme.primary
-        : (isDark ? colorScheme.onPrimaryContainer : colorScheme.onPrimary);
+    final buttonColor = isAlternate ? Colors.transparent : colorScheme.primary;
+    final buttonTextColor = colorScheme.onPrimary;
+    final buttonBorder = isAlternate
+        ? BorderSide(color: colorScheme.onPrimary.withValues(alpha: 0.92))
+        : BorderSide.none;
 
     return Card(
       elevation: isAlternate ? 4 : 2,
@@ -132,6 +131,7 @@ class NewsTile extends StatelessWidget {
                         style: TextButton.styleFrom(
                           backgroundColor: buttonColor,
                           foregroundColor: buttonTextColor,
+                          side: buttonBorder,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24, vertical: 12),
                           shape: const StadiumBorder(),
