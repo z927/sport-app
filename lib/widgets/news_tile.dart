@@ -142,6 +142,7 @@ class NewsTile extends StatelessWidget {
                             Text(
                               'LEGGI',
                               style: theme.textTheme.labelLarge?.copyWith(
+                                color: buttonTextColor,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 1.2,
                               ),

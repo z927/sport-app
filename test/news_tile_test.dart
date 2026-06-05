@@ -74,6 +74,22 @@ void main() {
     expect(button.style?.side?.resolve(<WidgetState>{}), BorderSide.none);
   });
 
+  testWidgets('standard news button label is white in light theme',
+      (tester) async {
+    const primary = Color(0xFFE30613);
+
+    await _pumpNewsTile(
+      tester,
+      isAlternate: false,
+      primary: primary,
+      brightness: Brightness.light,
+    );
+
+    final label = tester.widget<Text>(find.text('LEGGI'));
+
+    expect(label.style?.color, Colors.white);
+  });
+
   testWidgets('alternate news button is outlined with white text in dark theme',
       (tester) async {
     const primary = Color(0xFFE30613);
@@ -100,10 +116,11 @@ Future<void> _pumpNewsTile(
   WidgetTester tester, {
   required bool isAlternate,
   required Color primary,
+  Brightness brightness = Brightness.dark,
 }) async {
   final colorScheme = ColorScheme.fromSeed(
     seedColor: primary,
-    brightness: Brightness.dark,
+    brightness: brightness,
   ).copyWith(
     primary: primary,
     onPrimary: Colors.white,
