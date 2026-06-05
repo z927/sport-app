@@ -12,7 +12,7 @@ class GameMapper {
       awayTeam: json['away']?.toString() ?? json['awayTeam']?.toString() ?? '',
       homeScore: int.tryParse('${json['homeScore'] ?? ''}'),
       awayScore: int.tryParse('${json['awayScore'] ?? ''}'),
-      status: status == 'completed'
+      status: status == 'completed' || status == 'finished'
           ? GameStatus.completed
           : status == 'live'
               ? GameStatus.live

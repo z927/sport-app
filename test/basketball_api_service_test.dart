@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:sports_team_app/config/team_config.dart';
+import 'package:sports_team_app/models/team_content.dart';
 import 'package:sports_team_app/services/basketball_api_service.dart';
 
 void main() {
@@ -32,7 +33,8 @@ void main() {
         );
       });
 
-      final service = BasketballApiService(config: defaultTeamConfig, client: client);
+      final service =
+          BasketballApiService(config: defaultTeamConfig, client: client);
       final news = await service.getNews(limit: 1);
 
       expect(news, hasLength(1));
@@ -74,6 +76,38 @@ void main() {
       expect(news.dateLabel, '20 maggio 2026');
       expect(news.content, 'Full article content.\n\nPost game quotes.');
       expect(news.hasDetails, isTrue);
+    });
+
+    test('maps finished matches as completed games', () async {
+      final client = MockClient((request) async {
+        if (request.url.path == '/auth/token') {
+          return http.Response(jsonEncode({'token': 'fake-jwt'}), 200,
+              headers: {'content-type': 'application/json'});
+        }
+        expect(request.url.path, '/api/basketball/matches');
+        return http.Response(
+          jsonEncode([
+            {
+              'competition': 'Campionato',
+              'date': '26.04.2026 / 17:00',
+              'homeTeam': 'Varese',
+              'awayTeam': 'Cremona',
+              'homeScore': 84,
+              'awayScore': 75,
+              'status': 'finished',
+            }
+          ]),
+          200,
+          headers: {'content-type': 'application/json'},
+        );
+      });
+
+      final service =
+          BasketballApiService(config: defaultTeamConfig, client: client);
+      final matches = await service.getMatches();
+
+      expect(matches.single.status, GameStatus.completed);
+      expect(matches.single.homeScore, 84);
     });
 
     test('uses configured localhost backend for basketball endpoints', () async {

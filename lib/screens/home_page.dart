@@ -3,6 +3,7 @@ import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../widgets/news_tile.dart';
 import '../widgets/next_game_card.dart';
+import '../widgets/recent_games_carousel.dart';
 import '../widgets/section_header.dart';
 
 class HomePage extends StatelessWidget {
@@ -26,10 +27,7 @@ class HomePage extends StatelessWidget {
       (game) => game.status == GameStatus.scheduled,
       orElse: () => dashboard.games.first,
     );
-    final latestHighlights = dashboard.games
-        .where((game) => game.status == GameStatus.completed)
-        .take(5)
-        .toList();
+    final recentCompletedGames = _recentCompletedGames(dashboard.games);
 
     return RefreshIndicator(
       onRefresh: () async => onRefresh(),
@@ -83,39 +81,17 @@ class HomePage extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: SectionHeader(
-                title: 'Ultimi highlights', color: Color(config.primaryColor)),
+              title: 'Ultime partite',
+              color: Color(config.primaryColor),
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: SliverToBoxAdapter(
-              child: latestHighlights.isEmpty
-                  ? const Card(
-                      child: ListTile(
-                        leading: Icon(Icons.play_circle_outline),
-                        title: Text('Nessun highlight disponibile'),
-                      ),
-                    )
-                  : Column(
-                      children: latestHighlights
-                          .map(
-                            (game) => Card(
-                              margin: const EdgeInsets.only(bottom: 8),
-                              child: ListTile(
-                                leading: Icon(Icons.play_circle_fill,
-                                    color: Color(config.primaryColor)),
-                                title: Text(
-                                  '${game.homeTeam} vs ${game.awayTeam}',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text(game.dateLabel),
-                                trailing: const Icon(Icons.arrow_forward_ios,
-                                    size: 16),
-                              ),
-                            ),
-                          )
-                          .toList(),
-                    ),
+              child: RecentGamesCarousel(
+                games: recentCompletedGames,
+                config: config,
+              ),
             ),
           ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
@@ -192,4 +168,63 @@ class _SectionHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+List<Game> _recentCompletedGames(List<Game> games) {
+  final completedGames = games
+      .where((game) => game.status == GameStatus.completed)
+      .toList(growable: false);
+
+  return completedGames
+    ..sort((a, b) {
+      final aDate = _parseGameDate(a.dateLabel);
+      final bDate = _parseGameDate(b.dateLabel);
+      if (aDate == null && bDate == null) return 0;
+      if (aDate == null) return 1;
+      if (bDate == null) return -1;
+      return bDate.compareTo(aDate);
+    });
+}
+
+DateTime? _parseGameDate(String label) {
+  final normalized = label.trim();
+  final isoDate = DateTime.tryParse(normalized);
+  if (isoDate != null) return isoDate;
+
+  final numericMatch = RegExp(
+    r'(\d{1,2})[./-](\d{1,2})[./-](\d{4})',
+  ).firstMatch(normalized);
+  if (numericMatch != null) {
+    final day = int.parse(numericMatch.group(1)!);
+    final month = int.parse(numericMatch.group(2)!);
+    final year = int.parse(numericMatch.group(3)!);
+    return DateTime(year, month, day);
+  }
+
+  final monthMatch = RegExp(
+    r'(\d{1,2})\s+(gen|feb|mar|apr|mag|giu|lug|ago|set|ott|nov|dic)(?:\s+(\d{4}))?',
+    caseSensitive: false,
+  ).firstMatch(normalized);
+  if (monthMatch == null) return null;
+
+  const months = {
+    'gen': 1,
+    'feb': 2,
+    'mar': 3,
+    'apr': 4,
+    'mag': 5,
+    'giu': 6,
+    'lug': 7,
+    'ago': 8,
+    'set': 9,
+    'ott': 10,
+    'nov': 11,
+    'dic': 12,
+  };
+  final day = int.parse(monthMatch.group(1)!);
+  final month = months[monthMatch.group(2)!.toLowerCase()];
+  final year = int.tryParse(monthMatch.group(3) ?? '');
+  if (month == null || year == null) return null;
+
+  return DateTime(year, month, day);
 }
