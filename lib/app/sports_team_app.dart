@@ -51,7 +51,7 @@ class SportsTeamApp extends StatelessWidget {
       final isDark = colorScheme.brightness == Brightness.dark;
       final surfaceColor = isDark ? const Color(0xFF121212) : vareseWhite;
       final scaffoldBg =
-          isDark ? const Color(0xFF0A0A0A) : const Color(0xFFF3F4F6);
+          isDark ? const Color(0xFF0A0A0A) : const Color(0xFFF0F0F0);
       final textColor = isDark ? vareseWhite : vareseBlack;
       final borderColor =
           isDark ? const Color(0xFF2C2C2E) : const Color(0xFFE6E6EA);

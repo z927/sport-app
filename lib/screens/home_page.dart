@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../widgets/news_tile.dart';
@@ -42,14 +41,6 @@ class HomePage extends StatelessWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                config.appTitle.toUpperCase(),
-                style: theme.textTheme.titleLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.2,
-                ),
-              ),
               background: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -71,7 +62,8 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: SectionHeader(title: 'Ultime news', color: Color(config.primaryColor)),
+            child: SectionHeader(
+                title: 'Ultime news', color: Color(config.primaryColor)),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -90,7 +82,8 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: SectionHeader(title: 'Ultimi highlights', color: Color(config.primaryColor)),
+            child: SectionHeader(
+                title: 'Ultimi highlights', color: Color(config.primaryColor)),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -108,13 +101,16 @@ class HomePage extends StatelessWidget {
                             (game) => Card(
                               margin: const EdgeInsets.only(bottom: 8),
                               child: ListTile(
-                                leading: Icon(Icons.play_circle_fill, color: Color(config.primaryColor)),
+                                leading: Icon(Icons.play_circle_fill,
+                                    color: Color(config.primaryColor)),
                                 title: Text(
                                   '${game.homeTeam} vs ${game.awayTeam}',
-                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 subtitle: Text(game.dateLabel),
-                                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                                trailing: const Icon(Icons.arrow_forward_ios,
+                                    size: 16),
                               ),
                             ),
                           )
@@ -133,7 +129,8 @@ class HomePage extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: _SectionHeader(title: 'Palmarès', color: Color(config.primaryColor)),
+            child: _SectionHeader(
+                title: 'Palmarès', color: Color(config.primaryColor)),
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
@@ -147,9 +144,11 @@ class HomePage extends StatelessWidget {
                             item,
                             style: const TextStyle(fontWeight: FontWeight.w600),
                           ),
-                          backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                          backgroundColor:
+                              theme.colorScheme.surfaceContainerHighest,
                           side: BorderSide.none,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
                         ))
                     .toList(),
               ),
