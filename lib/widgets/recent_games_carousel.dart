@@ -25,15 +25,35 @@ class _RecentGamesCarouselState extends State<RecentGamesCarousel> {
     final games = widget.games.take(3).toList(growable: false);
 
     if (games.isEmpty) {
+      final primaryColor = Color(widget.config.primaryColor);
+      final secondaryColor = Color(widget.config.secondaryColor);
+
       return Card(
-        child: ListTile(
-          leading: Icon(
-            Icons.sports_basketball_outlined,
-            color: Color(widget.config.primaryColor),
+        elevation: 0,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                primaryColor.withValues(alpha: 0.12),
+                secondaryColor.withValues(alpha: 0.06),
+              ],
+            ),
           ),
-          title: const Text('Nessuna partita conclusa disponibile'),
-          subtitle:
-              const Text('Torna più tardi per vedere gli ultimi risultati.'),
+          child: ListTile(
+            leading: Icon(
+              Icons.sports_basketball_outlined,
+              color: primaryColor,
+            ),
+            title: const Text('Nessuna partita conclusa disponibile'),
+            subtitle:
+                const Text('Torna più tardi per vedere gli ultimi risultati.'),
+          ),
         ),
       );
     }
@@ -41,7 +61,7 @@ class _RecentGamesCarouselState extends State<RecentGamesCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 420,
+          height: 380,
           child: PageView.builder(
             itemCount: games.length,
             onPageChanged: (index) => setState(() => _currentIndex = index),
@@ -94,6 +114,7 @@ class RecentGameResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primaryColor = Color(config.primaryColor);
+    final secondaryColor = Color(config.secondaryColor);
     final homeScore = game.homeScore?.toString() ?? '-';
     final awayScore = game.awayScore?.toString() ?? '-';
 
@@ -101,96 +122,176 @@ class RecentGameResultCard extends StatelessWidget {
       label:
           '${game.competition}, ${game.dateLabel}, ${game.homeTeam} $homeScore - $awayScore ${game.awayTeam}',
       child: Card(
+        elevation: 0,
+        margin: const EdgeInsets.symmetric(vertical: 4),
         clipBehavior: Clip.antiAlias,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(2),
-          side: BorderSide(color: theme.colorScheme.outlineVariant),
+          borderRadius: BorderRadius.circular(24),
+          side: BorderSide(
+            color: primaryColor.withValues(alpha: 0.12),
+          ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              color: primaryColor,
-              child: Text(
-                game.competition.toUpperCase(),
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.4,
-                ),
-              ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.white,
+                primaryColor.withValues(alpha: 0.06),
+                secondaryColor.withValues(alpha: 0.10),
+              ],
+              stops: const [0, 0.58, 1],
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(18, 26, 18, 28),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      game.dateLabel,
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        color: primaryColor,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1.1,
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                right: -44,
+                top: -44,
+                child: _GradientOrb(color: primaryColor),
+              ),
+              Positioned(
+                left: -52,
+                bottom: -52,
+                child: _GradientOrb(color: secondaryColor),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [primaryColor, secondaryColor],
                       ),
                     ),
-                    const SizedBox(height: 34),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: _TeamMark(
-                            name: game.homeTeam,
-                            primaryColor: primaryColor,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                '$homeScore - $awayScore',
-                                maxLines: 1,
-                                style: theme.textTheme.displayLarge?.copyWith(
-                                  color: primaryColor,
-                                  fontWeight: FontWeight.w900,
-                                  height: 0.95,
-                                  letterSpacing: -2.5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: _TeamMark(
-                            name: game.awayTeam,
-                            primaryColor: primaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 34),
-                    Text(
-                      '${game.homeTeam}  vs  ${game.awayTeam}'.toUpperCase(),
+                    child: Text(
+                      game.competition.toUpperCase(),
                       textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleLarge?.copyWith(
-                        color: primaryColor,
+                        color: Colors.white,
                         fontWeight: FontWeight.w900,
                         letterSpacing: 1.4,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(18, 22, 18, 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.86),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(
+                                color: primaryColor.withValues(alpha: 0.10),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 14,
+                                vertical: 7,
+                              ),
+                              child: Text(
+                                game.dateLabel,
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.labelLarge?.copyWith(
+                                  color: secondaryColor,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.7,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 28),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: _TeamMark(
+                                  name: game.homeTeam,
+                                  primaryColor: primaryColor,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 10),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: Text(
+                                      '$homeScore - $awayScore',
+                                      maxLines: 1,
+                                      style:
+                                          theme.textTheme.displayLarge?.copyWith(
+                                        color: primaryColor,
+                                        fontWeight: FontWeight.w900,
+                                        height: 0.95,
+                                        letterSpacing: -2.5,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: _TeamMark(
+                                  name: game.awayTeam,
+                                  primaryColor: primaryColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 28),
+                          Text(
+                            '${game.homeTeam}  vs  ${game.awayTeam}'
+                                .toUpperCase(),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              color: primaryColor,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _GradientOrb extends StatelessWidget {
+  const _GradientOrb({required this.color});
+
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 132,
+      height: 132,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: RadialGradient(
+          colors: [
+            color.withValues(alpha: 0.20),
+            color.withValues(alpha: 0),
           ],
         ),
       ),

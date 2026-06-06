@@ -75,9 +75,12 @@ void main() {
 
     expect(find.text('Ultime partite'.toUpperCase()), findsOneWidget);
     expect(find.byType(RecentGamesCarousel), findsOneWidget);
+    expect(find.byType(SliverAppBar), findsNothing);
     expect(find.text('26.04.2026 / 17:00'), findsOneWidget);
     expect(find.text('84 - 75'), findsOneWidget);
     expect(find.text('VARESE  VS  CREMONA'), findsOneWidget);
+    expect(find.text('Bologna'), findsNothing);
+    expect(find.text('10.05.2026 / 17:00'), findsNothing);
     expect(find.text('01.04.2026 / 20:00'), findsNothing);
   });
 }

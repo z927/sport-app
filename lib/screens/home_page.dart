@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../config/team_config.dart';
 import '../models/team_content.dart';
 import '../widgets/news_tile.dart';
-import '../widgets/next_game_card.dart';
 import '../widgets/recent_games_carousel.dart';
 import '../widgets/section_header.dart';
 
@@ -23,10 +22,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final nextGame = dashboard.games.firstWhere(
-      (game) => game.status == GameStatus.scheduled,
-      orElse: () => dashboard.games.first,
-    );
     final recentCompletedGames = _recentCompletedGames(dashboard.games);
 
     return RefreshIndicator(
@@ -34,34 +29,26 @@ class HomePage extends StatelessWidget {
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
-          SliverAppBar(
-            expandedHeight: 120.0,
-            floating: false,
-            pinned: true,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(config.primaryColor),
-                      Color(config.secondaryColor),
-                    ],
-                  ),
-                ),
+          SliverToBoxAdapter(
+            child: SectionHeader(
+              title: 'Ultime partite',
+              color: Color(config.primaryColor),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: RecentGamesCarousel(
+                games: recentCompletedGames,
+                config: config,
               ),
             ),
           ),
           SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
-              child: NextGameCard(game: nextGame, config: config),
-            ),
-          ),
-          SliverToBoxAdapter(
             child: SectionHeader(
-                title: 'Ultime news', color: Color(config.primaryColor)),
+              title: 'Ultime news',
+              color: Color(config.primaryColor),
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -79,21 +66,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: SectionHeader(
-              title: 'Ultime partite',
-              color: Color(config.primaryColor),
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: RecentGamesCarousel(
-                games: recentCompletedGames,
-                config: config,
-              ),
-            ),
-          ),
           const SliverToBoxAdapter(child: SizedBox(height: 16)),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -106,7 +78,9 @@ class HomePage extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: _SectionHeader(
-                title: 'Palmarès', color: Color(config.primaryColor)),
+              title: 'Palmarès',
+              color: Color(config.primaryColor),
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
@@ -124,7 +98,8 @@ class HomePage extends StatelessWidget {
                               theme.colorScheme.surfaceContainerHighest,
                           side: BorderSide.none,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                         ))
                     .toList(),
               ),
